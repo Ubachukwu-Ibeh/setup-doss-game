@@ -1,13 +1,13 @@
+import { game } from "../game.js";
 import {
   keys,
-  gameSettings,
   resolveComponents,
   cameraSettings,
   components,
 } from "../globals/globals.js";
 
-export const engine = () => {
-  const validComponents = resolveComponents();
+export const engine = (newDisplayDetails) => {
+  const validComponents = resolveComponents(newDisplayDetails);
   const validComponentsArray = Object.values(validComponents);
 
   const resolveControls = () => {
@@ -161,7 +161,7 @@ export const engine = () => {
       const component = validComponents[key];
 
       if (component.gravity === true) {
-        component.y += component * (gameSettings.gravity / 100);
+        component.y += component * (game.gravity / 100);
       }
     });
   };

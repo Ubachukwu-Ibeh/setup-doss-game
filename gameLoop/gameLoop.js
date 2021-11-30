@@ -1,10 +1,10 @@
 import { engine } from "../engine/engine.js";
-import { game } from "../game.js";
+import { newDisplaySettings } from "../globals/globals.js";
 import { render } from "../renderer/renderer.js";
 
 export const gameLoop = () => {
   //resolveComponents
-  const Engine = engine();
+  const Engine = engine(newDisplaySettings);
 
   //gravity
   Engine.resolveGravity();
@@ -22,7 +22,7 @@ export const gameLoop = () => {
   // Engine.resolveCamera();
 
   //render
-  render({ ...game });
+  render(newDisplaySettings);
 
   requestAnimationFrame(gameLoop);
 };

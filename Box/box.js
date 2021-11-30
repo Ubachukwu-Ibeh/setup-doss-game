@@ -1,7 +1,5 @@
 import { addComponent, keys } from "../globals/globals.js";
 
-let numberOfInstances = 0;
-
 const observe = (obj, key, callBack) => {
   let val = obj[key];
 
@@ -10,10 +8,6 @@ const observe = (obj, key, callBack) => {
       return val;
     },
     set(newVal) {
-      let diff;
-      if (key === "x") {
-        diff = val - newVal;
-      }
       val = newVal;
       callBack(diff);
     },
@@ -59,8 +53,7 @@ export class Box {
       observe(this, "imageProperties", () => setImage());
     }
 
-    numberOfInstances += 1;
-    addComponent({ [this.id + `${numberOfInstances}`]: this });
+    addComponent(this);
     return this;
   }
 }

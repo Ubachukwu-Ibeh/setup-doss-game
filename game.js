@@ -1,12 +1,10 @@
-import { setGame } from "./globals/globals";
-
-export const game = setGame({
+export const game = {
   displayWidth: 1920,
   displayHeight: 1080,
   backgroundColor: "yellowgreen",
   size: "fit",
-});
-
-BoxEngine.addScenes({
-  level1: {},
-});
+  gravity: 10,
+  scenes: {
+    level1: {},
+  },
+};
