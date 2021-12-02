@@ -61,12 +61,29 @@ const getScaleValue = () => {
   const refX = windowWidth / 2 / (displayWidth / 2);
   const refY = windowHeight / 2 / (displayHeight / 2);
 
-  if (dx < dy) {
-    if (size === "fit") return refX;
-    if (size === "fill") return refY;
+  const res = {
+    refXY() {
+      if (size === "fit") return refX;
+      if (size === "fill") return refY;
+    },
+    refYX() {
+      if (size === "fit") return refY;
+      if (size === "fill") return refX;
+    },
+  };
+
+  if (displayWidth > displayHeight) {
+    if (windowHeight < windowWidth) {
+      return res.refYX();
+    } else {
+      return res.refXY();
+    }
   } else {
-    if (size === "fit") return refY;
-    if (size === "fill") return refX;
+    if (windowHeight < windowWidth) {
+      return res.refXY();
+    } else {
+      return res.refYX();
+    }
   }
 };
 
