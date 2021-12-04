@@ -2,8 +2,9 @@ import { game } from "../game.js";
 import {
   keys,
   resolveComponents,
-  cameraSettings,
   components,
+  currentScene,
+  newDisplaySettings,
 } from "../globals/globals.js";
 
 export const engine = (newDisplayDetails) => {
@@ -67,6 +68,8 @@ export const engine = (newDisplayDetails) => {
       collided;
 
     const resolve = () => {
+      let collisionDataA, collisionDataB;
+
       for (i; i < rigidBodies.length; i++) {
         j = 0;
         for (j; j < rigidBodies.length; j++) {
@@ -76,24 +79,50 @@ export const engine = (newDisplayDetails) => {
           const B = rigidBodies[j];
 
           if (testForCollision(A, B)) {
+            A.isColliding = true; //for view rendering
+            B.isColliding = true; //for view rendering
+
             collided = true;
             k = i;
             l = j;
             const resolveX = () => {
               if (A.x < B.x) {
+                collisionDataA = { object: B, right: true };
+                collisionDataB = { object: A, left: true };
                 return A.x + A.width - B.x;
               } else {
+                collisionDataA = { object: B, left: true };
+                collisionDataB = { object: A, right: true };
                 return -(B.x + B.width - A.x);
               }
             };
 
-            const resolveRefA = () => {
-              resolve();
+            const getResolveRef = () => {
+              if (A.onCollision) A.onCollision(collisionDataA);
+              if (B.onCollision) B.onCollision(collisionDataB);
+
+              const resolveRefA = () => {
+                resolve();
+              };
+
+              const resolveRefB = () => {
+                i = j;
+                resolve();
+              };
+              return {
+                resolveRefA,
+                resolveRefB,
+              };
             };
 
-            const resolveRefB = () => {
-              i = j;
-              resolve();
+            const checkX = (dx) => {
+              if (B.static) {
+                A.x -= dx;
+                getResolveRef().resolveRefA();
+              } else {
+                B.x += dx;
+                getResolveRef().resolveRefB();
+              }
             };
 
             if (A.y < B.y) {
@@ -101,20 +130,17 @@ export const engine = (newDisplayDetails) => {
                 dy = A.y + A.height - B.y;
 
               if (Math.abs(dx) < dy) {
-                if (B.static) {
-                  A.x -= dx;
-                  resolveRefA();
-                } else {
-                  B.x += dx;
-                  resolveRefB();
-                }
+                checkX(dx);
               } else {
+                collisionDataA = { object: B, bottom: true };
+                collisionDataB = { object: A, top: true };
+
                 if (B.static) {
                   A.y -= dy;
-                  resolveRefA();
+                  getResolveRef().resolveRefA();
                 } else {
                   B.y += dy;
-                  resolveRefB();
+                  getResolveRef().resolveRefB();
                 }
               }
             } else {
@@ -122,26 +148,20 @@ export const engine = (newDisplayDetails) => {
                 dy = B.y + B.height - A.y;
 
               if (Math.abs(dx) < dy) {
-                if (B.static) {
-                  A.x -= dx;
-                  resolveRefA();
-                } else {
-                  B.x += dx;
-                  resolveRefB();
-                }
+                checkX(dx);
               } else {
+                collisionDataA = { object: B, top: true };
+                collisionDataB = { object: A, bottom: true };
+
                 if (B.static) {
                   A.y += dy;
-                  resolveRefA();
+                  getResolveRef().resolveRefA();
                 } else {
                   B.y -= dy;
-                  resolveRefB();
+                  getResolveRef().resolveRefB();
                 }
               }
             }
-
-            if (A.onCollision) A.onCollision();
-            if (B.onCollision) B.onCollision();
           } else if (collided && j === rigidBodies.length - 1) {
             i = k;
             j = l;
@@ -156,42 +176,55 @@ export const engine = (newDisplayDetails) => {
     resolve();
   };
 
-  const resolveGravity = () => {
-    Object.keys(validComponents).forEach((key) => {
-      const component = validComponents[key];
-
-      if (component.gravity === true) {
-        component.y += component * (game.gravity / 100);
-      }
-    });
-  };
-
   const resolveCamera = () => {
-    let { focus, focusAreaX, focusAreaY, focusAreaW, focusAreaH } =
-      cameraSettings;
+    let { focus, x, y, width, height } = game.camera;
+    let { worldX, worldY, worldWidth, worldHeight } = currentScene;
+    let { scaledWidth, scaledHeight } = newDisplayDetails;
 
     const componentsArray = Object.values(components);
 
-    if (focus.x < focusAreaX) {
-      const dx = focusAreaX - focus.x;
+    if (focus.x < x) {
+      let dx = x - focus.x;
+
+      if (worldX + dx > 0) dx = -worldX;
+
+      currentScene.worldX += dx;
+
       componentsArray.forEach((component) => {
         component.x += dx;
       });
     }
-    if (focus.x + focus.width > focusAreaX + focusAreaW) {
-      const dx = focus.x + focus.width - (focusAreaX + focusAreaW);
+    if (focus.x + focus.width > x + width) {
+      let dx = focus.x + focus.width - (x + width);
+
+      if (worldX + worldWidth - dx < scaledWidth)
+        dx = worldX + worldWidth - scaledWidth;
+
+      currentScene.worldX -= dx;
+
       componentsArray.forEach((component) => {
         component.x -= dx;
       });
     }
-    if (focus.y < focusAreaY) {
-      const dy = focusAreaY - focus.y;
+    if (focus.y < y) {
+      let dy = y - focus.y;
+
+      if (worldY + dy > 0) dy = -worldY;
+
+      currentScene.worldY += dy;
+
       componentsArray.forEach((component) => {
         component.y += dy;
       });
     }
-    if (focus.y + focus.height > focusAreaY + focusAreaH) {
-      const dy = focus.y + focus.height - (focusAreaY + focusAreaH);
+    if (focus.y + focus.height > y + height) {
+      let dy = focus.y + focus.height - (y + height);
+
+      if (worldY + worldHeight - dy < scaledHeight)
+        dy = worldY + worldHeight - scaledHeight;
+
+      currentScene.worldY -= dy;
+
       componentsArray.forEach((component) => {
         component.y -= dy;
       });
@@ -203,6 +236,5 @@ export const engine = (newDisplayDetails) => {
     resolveUpdate,
     resolveCollisions,
     resolveCamera,
-    resolveGravity,
   };
 };

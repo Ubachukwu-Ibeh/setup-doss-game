@@ -6,9 +6,6 @@ export const gameLoop = () => {
   //resolveComponents
   const Engine = engine(newDisplaySettings);
 
-  //gravity
-  Engine.resolveGravity();
-
   //updates
   Engine.resolveUpdate();
 
@@ -19,7 +16,7 @@ export const gameLoop = () => {
   Engine.resolveCollisions();
 
   //camera
-  // Engine.resolveCamera();
+  Engine.resolveCamera();
 
   //render
   render(newDisplaySettings);

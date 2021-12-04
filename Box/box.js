@@ -1,21 +1,8 @@
 import { addComponent, keys } from "../globals/globals.js";
-
-const observe = (obj, key, callBack) => {
-  let val = obj[key];
-
-  Object.defineProperty(obj, key, {
-    get() {
-      return val;
-    },
-    set(newVal) {
-      val = newVal;
-      callBack(diff);
-    },
-  });
-};
+import { observe } from "../helpers/observer.js";
 
 export class Box {
-  constructor(props /**@object */) {
+  constructor(props) {
     Object.keys(props).forEach((key) => (this[key] = props[key]));
   }
   init() {

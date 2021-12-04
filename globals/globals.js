@@ -1,4 +1,6 @@
 import { game } from "../game.js";
+
+/////////////////CONTROLS///////////////
 export const keys = {}; //object for keeping track of keyboard keys boolean values
 
 /////////////////SCENES/////////////////
@@ -8,19 +10,8 @@ let scenes = {};
 export const addScenes = (scene) => {
   scenes = { ...scenes, ...scene };
 };
-export const switchScenes = (scene) => {
-  components = scenes[scene];
-};
 
-export let components = Object.values(game.scenes)[0];
-
-/////////////////SETTINGS/////////////////
-
-export let cameraSettings = {};
-
-export const setCamera = (settings) => {
-  cameraSettings = { ...cameraSettings, ...settings };
-};
+export let currentScene, components;
 
 /////////////////DISPLAY/////////////////
 
@@ -33,12 +24,14 @@ export const resolveComponents = (newDisplayDetails) => {
   Object.keys(components).forEach((key) => {
     const component = components[key];
     if (
-      component.x < scaledWidth &&
-      0 < component.x + component.width &&
-      component.y < scaledHeight &&
-      0 < component.y + component.height
+      (component.x < scaledWidth &&
+        0 < component.x + component.width &&
+        component.y < scaledHeight &&
+        0 < component.y + component.height) ||
+      component.isColliding
     ) {
       resolvedComponents[key] = component;
+      if (component.isColliding) component.isColliding = false;
     }
   });
 
@@ -49,15 +42,12 @@ const canvas = document.getElementById("canvas");
 
 const ctx = canvas.getContext("2d");
 
-const { displayWidth, displayHeight, size, backgroundColor } = game;
+const { displayWidth, displayHeight, size } = game;
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
 
 const getScaleValue = () => {
-  const dx = windowWidth - displayWidth;
-  const dy = windowHeight - displayHeight;
-
   const refX = windowWidth / 2 / (displayWidth / 2);
   const refY = windowHeight / 2 / (displayHeight / 2);
 
@@ -111,7 +101,7 @@ const initialPy = displayHeight / 2;
 const finalPx = scaledWidth / 2;
 const finalPy = scaledHeight / 2;
 
-const scaleComponent = (component) => {
+export const scaleComponent = (component) => {
   component.x += component.x - initialPx - (component.x - finalPx);
   component.y += component.y - initialPy - (component.y - finalPy);
   scale(component, finalPx, finalPy, scaleValue);
@@ -127,3 +117,16 @@ export const newDisplaySettings = {
   scaledWidth,
   scaledHeight,
 };
+
+const scaleWorld = () => {
+  currentScene.worldWidth *= scaleValue;
+  currentScene.worldHeight *= scaleValue;
+};
+
+export const switchScenes = (scene) => {
+  currentScene = Object.values(game.scenes)[scene];
+  components = currentScene.components;
+  scaleWorld();
+};
+
+switchScenes(0);

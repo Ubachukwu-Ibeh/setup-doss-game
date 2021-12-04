@@ -1,10 +1,16 @@
 export const game = {
   displayWidth: 1920,
   displayHeight: 1080,
-  backgroundColor: "yellowgreen",
+  backgroundColor: "black",
   size: "fit",
-  gravity: 10,
   scenes: {
-    level1: {},
+    level1: {
+      worldWidth: 3000,
+      worldHeight: 2000,
+      worldX: 0,
+      worldY: 0,
+      components: {},
+    },
   },
+  camera: {},
 };
