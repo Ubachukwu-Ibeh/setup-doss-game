@@ -1,5 +1,5 @@
 import { addComponent, keys } from "../globals/globals.js";
-import { observe } from "../helpers/observer.js";
+import { observe, XYobserver } from "../helpers/observer.js";
 
 export class Box {
   constructor(props) {
@@ -36,9 +36,14 @@ export class Box {
         image.setAttribute("height", this.imageProperties.height);
         this.imageProperties.image = image;
       };
+
       setImage();
+
       observe(this, "imageProperties", () => setImage());
     }
+
+    XYobserver(this, "x");
+    XYobserver(this, "y");
 
     addComponent(this);
     return this;

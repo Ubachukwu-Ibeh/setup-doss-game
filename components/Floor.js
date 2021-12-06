@@ -8,6 +8,7 @@ export const Floor = new BoxEngine.Box({
   height: 200,
   color: "green",
   layer: 2,
+  // static: true,
   rigidBody: true,
   onCollision() {},
 }).init();

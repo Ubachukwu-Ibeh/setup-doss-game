@@ -4,7 +4,6 @@ import {
   resolveComponents,
   components,
   currentScene,
-  newDisplaySettings,
 } from "../globals/globals.js";
 
 export const engine = (newDisplayDetails) => {
