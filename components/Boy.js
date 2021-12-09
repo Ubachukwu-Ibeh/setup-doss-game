@@ -1,7 +1,9 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-export const Boy = new BoxEngine.Box({
+const { move, Box } = BoxEngine;
+
+export const Boy = new Box({
   id: "Boy",
   x: 1200,
   y: 600,
@@ -13,16 +15,16 @@ export const Boy = new BoxEngine.Box({
   controls: {
     type: "keyboard",
     ArrowRight() {
-      Boy.x += 10;
+      Boy.x += move(10);
     },
     ArrowDown() {
-      Boy.y += 10;
+      Boy.y += move(10);
     },
     ArrowUp() {
-      Boy.y -= 10;
+      Boy.y -= move(10);
     },
     ArrowLeft() {
-      Boy.x -= 10;
+      Boy.x -= move(10);
     },
   },
   onCollision() {},

@@ -1,6 +1,8 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 
-export const Floor = new BoxEngine.Box({
+const { move, Box } = BoxEngine;
+
+export const Floor = new Box({
   id: "Floor",
   x: 600,
   y: 600,
@@ -8,12 +10,11 @@ export const Floor = new BoxEngine.Box({
   height: 200,
   color: "green",
   layer: 2,
-  // static: true,
   rigidBody: true,
   onCollision() {},
 }).init();
 
-const Floor2 = new BoxEngine.Box({
+const Floor2 = new Box({
   id: "Floor2",
   x: 700,
   y: 10,
@@ -30,11 +31,11 @@ const Floor2 = new BoxEngine.Box({
   },
   update() {
     Floor2.dv += 1;
-    Floor2.y += Floor2.v + Floor2.dv;
+    Floor2.y += move(Floor2.v + Floor2.dv);
   },
 }).init();
 
-const bg = new BoxEngine.Box({
+const bg = new Box({
   id: "bg",
   x: 0,
   y: 0,
