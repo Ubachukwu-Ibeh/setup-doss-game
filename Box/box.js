@@ -1,45 +1,50 @@
 import { addComponent, keys } from "../globals/globals.js";
-import { observe } from "../helpers/observer.js";
+
+const createImgElement = (src) => {
+  const image = document.createElement("img");
+  image.setAttribute("src", src);
+  return image;
+};
+
+const observe = (obj, key) => {
+  let val = obj[key];
+
+  Object.defineProperty(obj, key, {
+    get() {
+      return val;
+    },
+    set(newVal) {
+      val = createImgElement(newVal);
+    },
+  });
+};
 
 export class Box {
   constructor(props) {
     Object.keys(props).forEach((key) => (this[key] = props[key]));
   }
   init() {
-    if (this.controls) {
-      switch (this.controls.type) {
-        case "keyboard":
-          window.addEventListener("keydown", (e) => {
-            keys[e.key] = true;
-          });
-          window.addEventListener("keyup", (e) => {
-            keys[e.key] = false;
-          });
-          break;
-        case "touch":
-          break;
-        case "pad":
-          break;
-
-        default:
-          break;
-      }
+    if (this.keyboardControls) {
+      window.addEventListener("keydown", (e) => {
+        keys[e.key] = true;
+      });
+      window.addEventListener("keyup", (e) => {
+        keys[e.key] = false;
+      });
     }
 
-    if (this.imageProperties) {
-      let setImage;
-      setImage = () => {
-        const src = this.imageProperties.src;
-        const image = document.createElement("img");
-        image.setAttribute("src", src);
-        image.setAttribute("width", this.imageProperties.width);
-        image.setAttribute("height", this.imageProperties.height);
-        this.imageProperties.image = image;
+    if (this.animations) {
+      this.animations.spriteSheet = createImgElement(
+        this.animations.spriteSheet
+      );
+
+      observe(this.animations, "spriteSheet");
+
+      this.playAnimation = (animationName) => {
+        this.animations.frameTick = 0;
+        this.animations.frameNumber = 0;
+        this.animations.currentAnimation = this.animations[animationName];
       };
-
-      setImage();
-
-      observe(this, "imageProperties", () => setImage());
     }
 
     addComponent(this);

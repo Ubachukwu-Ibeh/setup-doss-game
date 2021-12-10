@@ -1,11 +1,11 @@
 import { Box } from "../Box/box.js";
-import { addScenes, switchScenes, move } from "../globals/globals.js";
+import { addScenes, switchScenes, set } from "../globals/globals.js";
 
 const BoxEngine = {
   Box,
   addScenes,
   switchScenes,
-  move,
+  set,
 };
 
 export default BoxEngine;

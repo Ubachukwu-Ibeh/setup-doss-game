@@ -1,7 +1,4 @@
-import { game } from "../game.js";
-import { newDisplaySettings } from "../globals/globals.js";
-
-export const observe = (obj, key, callBack) => {
+export const observe = (obj, key) => {
   let val = obj[key];
 
   Object.defineProperty(obj, key, {
@@ -10,7 +7,6 @@ export const observe = (obj, key, callBack) => {
     },
     set(newVal) {
       val = newVal;
-      callBack();
     },
   });
 };

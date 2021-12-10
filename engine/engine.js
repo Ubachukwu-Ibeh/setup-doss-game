@@ -12,7 +12,7 @@ export const engine = (newDisplayDetails) => {
 
   const resolveControls = () => {
     validComponentsArray.forEach((component) => {
-      if (component.controls) {
+      if (component.keyboardControls) {
         Object.keys(keys)
           .filter((key) => {
             if (keys[key] === true) {
@@ -20,7 +20,7 @@ export const engine = (newDisplayDetails) => {
             }
           })
           .forEach((key) => {
-            const cmd = component.controls[key];
+            const cmd = component.keyboardControls[key];
             if (cmd) {
               cmd();
             }
@@ -230,10 +230,29 @@ export const engine = (newDisplayDetails) => {
     }
   };
 
+  const resolveAnimation = () => {
+    validComponentsArray.forEach((component) => {
+      if (component.currentAnimation) {
+        const { frameTick, frameNumber, speed, currentAnimation } =
+          component.animations;
+
+        if (frameTick % speed || 1 === 0) {
+          component.animations.currentFrame = currentAnimation[frameNumber];
+          component.animations.frameNumber =
+            (frameNumber + 1) % currentAnimation.length;
+
+          component.animations.frameTick = 0;
+        }
+        component.animations.frameTick += 1;
+      }
+    });
+  };
+
   return {
     resolveControls,
     resolveUpdate,
     resolveCollisions,
     resolveCamera,
+    resolveAnimation,
   };
 };

@@ -5,12 +5,6 @@ export const keys = {}; //object for keeping track of keyboard keys boolean valu
 
 /////////////////SCENES/////////////////
 
-let scenes = {};
-
-export const addScenes = (scene) => {
-  scenes = { ...scenes, ...scene };
-};
-
 export let currentScene, components;
 
 /////////////////DISPLAY/////////////////
@@ -79,28 +73,35 @@ const getScaleValue = () => {
 
 const scaleValue = getScaleValue();
 
+export const addScenes = (name, scene) => {
+  game.scenes[name] = scene;
+};
+
+export const switchScenes = (scene) => {
+  const sceneType = typeof scene;
+
+  if (sceneType === "number") {
+    currentScene = Object.values(game.scenes)[scene];
+  } else if (sceneType === "string") {
+    currentScene = game.scenes[scene];
+  }
+
+  components = currentScene.components;
+
+  currentScene.worldWidth *= scaleValue;
+  currentScene.worldHeight *= scaleValue;
+};
+
+switchScenes(0);
+
 const scaledWidth = displayWidth * scaleValue;
 const scaledHeight = displayHeight * scaleValue;
 
 canvas.width = scaledWidth;
 canvas.height = scaledHeight;
 
-const initialPx = displayWidth / 2;
-const initialPy = displayHeight / 2;
-const finalPx = scaledWidth / 2;
-const finalPy = scaledHeight / 2;
-
-export const scaleComponent = (component) => {
-  component.x = finalPx + scaleValue * (component.x - initialPx);
-  component.y = finalPy + scaleValue * (component.y - initialPy);
-
-  component.width *= scaleValue;
-  component.height *= scaleValue;
-};
-
 export const addComponent = (component) => {
   components[component.id] = component;
-  scaleComponent(component);
 };
 
 export const newDisplaySettings = {
@@ -109,19 +110,6 @@ export const newDisplaySettings = {
   scaledHeight,
 };
 
-const scaleWorld = () => {
-  currentScene.worldWidth *= scaleValue;
-  currentScene.worldHeight *= scaleValue;
-};
-
-export const switchScenes = (scene) => {
-  currentScene = Object.values(game.scenes)[scene];
-  components = currentScene.components;
-  scaleWorld();
-};
-
-switchScenes(0);
-
-export const move = (val) => {
-  return (val * newDisplaySettings.scaledWidth) / game.displayWidth;
+export const set = (val) => {
+  return val * scaleValue;
 };
