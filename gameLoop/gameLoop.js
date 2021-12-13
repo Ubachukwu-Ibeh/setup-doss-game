@@ -1,7 +1,8 @@
 import { engine } from "../engine/engine.js";
-import { newDisplaySettings } from "../globals/globals.js";
+import { game } from "../game.js";
 import { render } from "../renderer/renderer.js";
 
+const { newDisplaySettings } = game;
 export const gameLoop = () => {
   const Engine = engine(newDisplaySettings);
 

@@ -1,7 +1,7 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-const { set, Box } = BoxEngine;
+const { set, Box, zoom } = BoxEngine;
 
 export const Boy = new Box({
   id: "Boy",

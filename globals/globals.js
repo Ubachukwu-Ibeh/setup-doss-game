@@ -11,7 +11,7 @@ export let currentScene, components;
 
 export const resolveComponents = (newDisplayDetails) => {
   //Resolves which components should be calculated and rendered on screen
-  const { scaledWidth, scaledHeight } = newDisplayDetails;
+  const { scaledX, scaledY, scaledWidth, scaledHeight } = newDisplayDetails;
 
   const resolvedComponents = {};
 
@@ -19,9 +19,9 @@ export const resolveComponents = (newDisplayDetails) => {
     const component = components[key];
     if (
       (component.x < scaledWidth &&
-        0 < component.x + component.width &&
+        scaledX < component.x + component.width &&
         component.y < scaledHeight &&
-        0 < component.y + component.height) ||
+        scaledY < component.y + component.height) ||
       component.isColliding
     ) {
       resolvedComponents[key] = component;
@@ -71,7 +71,8 @@ const getScaleValue = () => {
   }
 };
 
-const scaleValue = getScaleValue();
+let scaleValue = getScaleValue();
+game.originalScaleValue = scaleValue;
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
@@ -97,22 +98,17 @@ switchScenes(0);
 const scaledWidth = displayWidth * scaleValue;
 const scaledHeight = displayHeight * scaleValue;
 
+game.newDisplaySettings.scaledWidth = scaledWidth;
+game.newDisplaySettings.scaledHeight = scaledHeight;
+game.newDisplaySettings.ctx = ctx;
+
 canvas.width = scaledWidth;
 canvas.height = scaledHeight;
-
-export const addComponent = (component) => {
-  components[component.id] = component;
-};
-
-export const newDisplaySettings = {
-  ctx,
-  scaledWidth,
-  scaledHeight,
-};
 
 export const set = (val) => {
   return val * scaleValue;
 };
+
 const getRandom = (a) => Math.floor(Math.random() * a);
 
 export const cameraShake = (intensity, duration) => {
@@ -121,4 +117,68 @@ export const cameraShake = (intensity, duration) => {
     const operation = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
     game.cameraShakeDetails[axis].push(operation * getRandom(intensity));
   }
+};
+
+const resolveZoom = (focus, val, reset) => {
+  let amount = val;
+  if (reset) amount = 1 / amount;
+  scaleValue = amount;
+
+  const initialPx = focus.x + focus.width / 2;
+  const initialPy = focus.y + focus.height / 2;
+
+  focus.x *= amount;
+  focus.y *= amount;
+  focus.width *= amount;
+  focus.height *= amount;
+
+  const dx = initialPx - (focus.x + focus.width / 2);
+  const dy = initialPy - (focus.y + focus.height / 2);
+
+  game.camera.x *= amount;
+  game.camera.y *= amount;
+  game.camera.width *= amount;
+  game.camera.height *= amount;
+  game.camera.x += dx;
+  game.camera.y += dy;
+
+  currentScene.worldX = dx;
+  currentScene.worldY = dy;
+  currentScene.worldWidth *= amount;
+  currentScene.worldHeight *= amount;
+
+  game.newDisplaySettings.scaledX = dx;
+  game.newDisplaySettings.scaledY = dy;
+  game.newDisplaySettings.scaledWidth = displayWidth * amount;
+  game.newDisplaySettings.scaledHeight = displayWidth * amount;
+
+  Object.values(components).forEach((component) => {
+    if (component === focus) return;
+    component.x *= amount;
+    component.y *= amount;
+    component.width *= amount;
+    component.height *= amount;
+    component.x += dx;
+    component.y += dy;
+  });
+
+  focus.x += dx;
+  focus.y += dy;
+};
+
+let hasScaled = false;
+
+export const zoom = (focus, amount) => {
+  if (hasScaled) {
+    resolveZoom(focus, scaleValue, true);
+    hasScaled = false;
+    zoom(focus, amount);
+  } else {
+    resolveZoom(focus, amount);
+    hasScaled = true;
+  }
+};
+
+export const addComponent = (component) => {
+  components[component.id] = component;
 };

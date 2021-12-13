@@ -6,6 +6,20 @@ export class Game {
         xShakeValues: [],
         yShakeValues: [],
       };
+      this.newDisplaySettings = {
+        scaledX: 0,
+        scaledY: 0,
+        scaledWidth: undefined,
+        scaledHeight: undefined,
+        ctx: undefined,
+      };
+      this.camera = {
+        focus: undefined,
+        x: undefined,
+        y: undefined,
+        width: undefined,
+        height: undefined,
+      };
     }
     return this;
   }

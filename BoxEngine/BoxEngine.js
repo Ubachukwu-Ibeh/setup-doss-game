@@ -4,6 +4,7 @@ import {
   switchScenes,
   set,
   cameraShake,
+  zoom,
 } from "../globals/globals.js";
 
 const BoxEngine = {
@@ -12,6 +13,7 @@ const BoxEngine = {
   switchScenes,
   set,
   cameraShake,
+  zoom,
 };
 
 export default BoxEngine;

@@ -1,6 +1,7 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
+import { Boy } from "./Boy.js";
 
-const { set, Box } = BoxEngine;
+const { set, Box, zoom } = BoxEngine;
 
 export const Floor = new Box({
   id: "Floor",
@@ -44,3 +45,6 @@ const bg = new Box({
   color: "yellowgreen",
   layer: -1,
 }).init();
+
+// zoom(Boy, 2);
+// zoom(Boy, 1);

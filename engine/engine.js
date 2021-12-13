@@ -182,11 +182,11 @@ export const engine = (newDisplayDetails) => {
     let { focus, x, y, width, height } = game.camera;
     let { scaledWidth, scaledHeight } = newDisplayDetails;
 
-    const resolveShake = () => {
-      let { worldX, worldY, worldWidth, worldHeight } = currentScene;
+    const xShakeValues = game.cameraShakeDetails.xShakeValues;
+    const yShakeValues = game.cameraShakeDetails.yShakeValues;
 
-      const xShakeValues = game.cameraShakeDetails.xShakeValues;
-      const yShakeValues = game.cameraShakeDetails.yShakeValues;
+    if (xShakeValues.length !== 0 || xShakeValues.length !== 0) {
+      let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 
       let xVal = xShakeValues[xShakeValues.length - 1];
       let yVal = yShakeValues[yShakeValues.length - 1];
@@ -213,11 +213,10 @@ export const engine = (newDisplayDetails) => {
             component.y += yVal;
           }
         });
+        xShakeValues.pop();
+        yShakeValues.pop();
       }
-      xShakeValues.pop();
-      yShakeValues.pop();
-    };
-    resolveShake();
+    }
 
     let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 

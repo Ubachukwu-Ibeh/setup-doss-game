@@ -1,5 +1,5 @@
 import { game } from "../game.js";
-import { components, set } from "../globals/globals.js";
+import { components } from "../globals/globals.js";
 
 export const render = ({ ctx, scaledWidth, scaledHeight }) => {
   ctx.clearRect(0, 0, scaledWidth, scaledHeight);
@@ -29,17 +29,7 @@ export const render = ({ ctx, scaledWidth, scaledHeight }) => {
 
       if (currentFrame) {
         const [sx, sy, sw, sh, ix, iy, iw, ih] = currentFrame;
-        ctx.drawImage(
-          spriteSheet,
-          sx,
-          sy,
-          sw,
-          sh,
-          set(ix),
-          set(iy),
-          set(iw),
-          set(ih)
-        );
+        ctx.drawImage(spriteSheet, sx, sy, sw, sh, ix, iy, iw, ih);
       }
     }
   });
