@@ -113,3 +113,12 @@ export const newDisplaySettings = {
 export const set = (val) => {
   return val * scaleValue;
 };
+const getRandom = (a) => Math.floor(Math.random() * a);
+
+export const cameraShake = (intensity, duration) => {
+  game.cameraShakeDetails[axis] = [];
+  for (let i = 0; i < duration; i++) {
+    const operation = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
+    game.cameraShakeDetails[axis].push(operation * getRandom(intensity));
+  }
+};

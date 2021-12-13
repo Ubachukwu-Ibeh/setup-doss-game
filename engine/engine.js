@@ -4,6 +4,7 @@ import {
   resolveComponents,
   components,
   currentScene,
+  set,
 } from "../globals/globals.js";
 
 export const engine = (newDisplayDetails) => {
@@ -176,11 +177,49 @@ export const engine = (newDisplayDetails) => {
   };
 
   const resolveCamera = () => {
+    const componentsArray = Object.values(components);
+
     let { focus, x, y, width, height } = game.camera;
-    let { worldX, worldY, worldWidth, worldHeight } = currentScene;
     let { scaledWidth, scaledHeight } = newDisplayDetails;
 
-    const componentsArray = Object.values(components);
+    const resolveShake = () => {
+      let { worldX, worldY, worldWidth, worldHeight } = currentScene;
+
+      const xShakeValues = game.cameraShakeDetails.xShakeValues;
+      const yShakeValues = game.cameraShakeDetails.yShakeValues;
+
+      let xVal = xShakeValues[xShakeValues.length - 1];
+      let yVal = yShakeValues[yShakeValues.length - 1];
+
+      if (xVal !== undefined || xVal !== undefined) {
+        if (worldX + xVal > 0) xVal = -worldX;
+
+        if (worldX + worldWidth - xVal < scaledWidth)
+          xVal = worldX + worldWidth - scaledWidth;
+
+        if (worldY + yVal > 0) yVal = -worldY;
+
+        if (worldY + worldHeight - yVal < scaledHeight)
+          yVal = worldY + worldHeight - scaledHeight;
+
+        currentScene.worldX += xVal;
+        currentScene.worldY += yVal;
+
+        componentsArray.forEach((component) => {
+          if (xShakeValues.length) {
+            component.x += xVal;
+          }
+          if (yShakeValues.length) {
+            component.y += yVal;
+          }
+        });
+      }
+      xShakeValues.pop();
+      yShakeValues.pop();
+    };
+    resolveShake();
+
+    let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 
     if (focus.x < x) {
       let dx = x - focus.x;
@@ -193,6 +232,7 @@ export const engine = (newDisplayDetails) => {
         component.x += dx;
       });
     }
+
     if (focus.x + focus.width > x + width) {
       let dx = focus.x + focus.width - (x + width);
 
@@ -205,6 +245,7 @@ export const engine = (newDisplayDetails) => {
         component.x -= dx;
       });
     }
+
     if (focus.y < y) {
       let dy = y - focus.y;
 

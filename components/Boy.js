@@ -34,8 +34,8 @@ const marginY = 2 * (Boy.height / 3);
 
 game.camera = {
   focus: Boy,
-  x: Boy.x - marginX,
-  y: Boy.y - marginY,
+  x: set(1200) - marginX,
+  y: set(600) - marginY,
   width: 2 * marginX + Boy.width,
   height: 2 * marginY + Boy.height,
 };

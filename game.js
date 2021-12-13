@@ -1,4 +1,6 @@
-export const game = {
+import { Game } from "./Game/Game.js";
+
+export const game = new Game({
   displayWidth: 1920,
   displayHeight: 1080,
   backgroundColor: "black",
@@ -12,5 +14,4 @@ export const game = {
       components: {},
     },
   },
-  camera: {},
-};
+});
