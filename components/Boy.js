@@ -10,8 +10,9 @@ export const Boy = new Box({
   width: set(50),
   height: set(50),
   color: "red",
-  layer: 1,
+  layer: 2,
   rigidBody: true,
+  blendMode: "overlay",
   keyboardControls: {
     ArrowRight() {
       Boy.x += set(10);

@@ -21,6 +21,8 @@ const observe = (obj, key) => {
 
 export class Box {
   constructor(props) {
+    this.type = "component";
+    this.depth = 1;
     Object.keys(props).forEach((key) => (this[key] = props[key]));
   }
   init() {

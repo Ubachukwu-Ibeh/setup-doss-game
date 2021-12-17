@@ -79,9 +79,6 @@ export const engine = (newDisplayDetails) => {
           const B = rigidBodies[j];
 
           if (testForCollision(A, B)) {
-            A.isColliding = true; //for view rendering
-            B.isColliding = true; //for view rendering
-
             collided = true;
             k = i;
             l = j;
@@ -177,96 +174,111 @@ export const engine = (newDisplayDetails) => {
   };
 
   const resolveCamera = () => {
-    const componentsArray = Object.values(components);
+    const allComponents = Object.values(components);
+
+    const componentsArray = allComponents.filter(
+      (component) => component.type !== "ui"
+    );
 
     let { focus, x, y, width, height } = game.camera;
     let { scaledWidth, scaledHeight } = newDisplayDetails;
 
-    const xShakeValues = game.cameraShakeDetails.xShakeValues;
-    const yShakeValues = game.cameraShakeDetails.yShakeValues;
-
-    if (xShakeValues.length !== 0 || xShakeValues.length !== 0) {
+    const resolveFit = () => {
+      //fit screen after all camera movememnts
       let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 
-      let xVal = xShakeValues[xShakeValues.length - 1];
-      let yVal = yShakeValues[yShakeValues.length - 1];
-
-      if (xVal !== undefined || xVal !== undefined) {
-        if (worldX + xVal > 0) xVal = -worldX;
-
-        if (worldX + worldWidth - xVal < scaledWidth)
-          xVal = worldX + worldWidth - scaledWidth;
-
-        if (worldY + yVal > 0) yVal = -worldY;
-
-        if (worldY + worldHeight - yVal < scaledHeight)
-          yVal = worldY + worldHeight - scaledHeight;
-
-        currentScene.worldX += xVal;
-        currentScene.worldY += yVal;
-
+      if (worldX > 0) {
+        let dx = -worldX;
+        currentScene.worldX += dx;
         componentsArray.forEach((component) => {
-          if (xShakeValues.length) {
-            component.x += xVal;
-          }
-          if (yShakeValues.length) {
-            component.y += yVal;
-          }
+          component.x += dx / component.depth;
         });
-        xShakeValues.pop();
-        yShakeValues.pop();
       }
-    }
 
-    let { worldX, worldY, worldWidth, worldHeight } = currentScene;
+      if (worldX + worldWidth < scaledWidth) {
+        let dx = scaledWidth - (worldX + worldWidth);
+        currentScene.worldX += dx;
+        componentsArray.forEach((component) => {
+          component.x += dx / component.depth;
+        });
+      }
 
+      if (worldY > 0) {
+        let dy = -worldY;
+        currentScene.worldY += dy;
+        componentsArray.forEach((component) => {
+          component.y += dy / component.depth;
+        });
+      }
+
+      if (worldY + worldHeight < scaledHeight) {
+        let dy = scaledHeight - (worldY + worldHeight);
+        currentScene.worldY += dy;
+        componentsArray.forEach((component) => {
+          component.y += dy / component.depth;
+        });
+      }
+    };
+
+    /////////////////////TRACKING//////////////////////
     if (focus.x < x) {
       let dx = x - focus.x;
-
-      if (worldX + dx > 0) dx = -worldX;
-
       currentScene.worldX += dx;
-
       componentsArray.forEach((component) => {
-        component.x += dx;
+        component.x += dx / component.depth;
       });
     }
 
     if (focus.x + focus.width > x + width) {
       let dx = focus.x + focus.width - (x + width);
-
-      if (worldX + worldWidth - dx < scaledWidth)
-        dx = worldX + worldWidth - scaledWidth;
-
       currentScene.worldX -= dx;
-
       componentsArray.forEach((component) => {
-        component.x -= dx;
+        component.x -= dx / component.depth;
       });
     }
 
     if (focus.y < y) {
       let dy = y - focus.y;
-
-      if (worldY + dy > 0) dy = -worldY;
-
       currentScene.worldY += dy;
-
       componentsArray.forEach((component) => {
-        component.y += dy;
+        component.y += dy / component.depth;
       });
     }
+
     if (focus.y + focus.height > y + height) {
       let dy = focus.y + focus.height - (y + height);
-
-      if (worldY + worldHeight - dy < scaledHeight)
-        dy = worldY + worldHeight - scaledHeight;
-
       currentScene.worldY -= dy;
+      componentsArray.forEach((component) => {
+        component.y -= dy / component.depth;
+      });
+    }
+
+    resolveFit(); //resolve fit after tracking.
+
+    ////////////////////////SHAKE/////////////////////////////
+    const xShakeValues = game.cameraShakeDetails.xShakeValues;
+    const yShakeValues = game.cameraShakeDetails.yShakeValues;
+
+    if (xShakeValues.length !== 0 || yShakeValues.length !== 0) {
+      let xVal = xShakeValues[xShakeValues.length - 1] || 0;
+      let yVal = yShakeValues[yShakeValues.length - 1] || 0;
+
+      currentScene.worldX += xVal;
+      currentScene.worldY += yVal;
 
       componentsArray.forEach((component) => {
-        component.y -= dy;
+        if (xShakeValues.length) {
+          component.x += xVal / component.depth;
+        }
+        if (yShakeValues.length) {
+          component.y += yVal / component.depth;
+        }
       });
+
+      resolveFit(); //resolve fit after shaking.
+
+      xShakeValues.pop();
+      yShakeValues.pop();
     }
   };
 

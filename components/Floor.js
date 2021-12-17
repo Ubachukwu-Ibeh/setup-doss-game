@@ -4,13 +4,14 @@ import { Boy } from "./Boy.js";
 const { set, Box, zoom } = BoxEngine;
 
 export const Floor = new Box({
-  id: "Floor",
+  id: "Floor1",
   x: set(600),
   y: set(600),
   width: set(200),
   height: set(200),
   color: "green",
-  layer: 2,
+  layer: 1,
+  important: true,
   rigidBody: true,
   onCollision() {},
 }).init();
@@ -24,7 +25,7 @@ const Floor2 = new Box({
   dv: 0,
   v: 2,
   color: "green",
-  layer: 2,
+  layer: 1,
   rigidBody: true,
   onCollision() {
     Floor2.dv = 0;
@@ -46,5 +47,18 @@ const bg = new Box({
   layer: -1,
 }).init();
 
-// zoom(Boy, 2);
-// zoom(Boy, 1);
+let time = 0,
+  val = 1;
+
+new Box({
+  id: "Floor3",
+  x: set(1000),
+  y: set(200),
+  width: set(400),
+  height: set(200),
+  color: "rgb(120,180,50)",
+  depth: 2,
+  layer: 1,
+  onCollision() {},
+  update() {},
+}).init();

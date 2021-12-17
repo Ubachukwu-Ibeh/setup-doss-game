@@ -1,3 +1,14 @@
+const getRandom = (a) => Math.floor(Math.random() * a);
+
+export const cameraShake = (intensity, duration) => {
+  const arr = [];
+  for (let i = 0; i < duration; i++) {
+    const operation = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
+    arr.push(operation * getRandom(intensity));
+  }
+  return arr;
+};
+
 export class Game {
   constructor(props) {
     for (const key in props) {

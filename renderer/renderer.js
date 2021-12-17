@@ -20,6 +20,9 @@ export const render = ({ ctx, scaledWidth, scaledHeight }) => {
 
     const { x, y, width, height, color } = component;
 
+    if (component.blendMode) {
+      ctx.globalCompositeOperation = component.blendMode;
+    }
     if (color) {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, width, height);
@@ -32,5 +35,6 @@ export const render = ({ ctx, scaledWidth, scaledHeight }) => {
         ctx.drawImage(spriteSheet, sx, sy, sw, sh, ix, iy, iw, ih);
       }
     }
+    ctx.globalCompositeOperation = "normal";
   });
 };

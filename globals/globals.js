@@ -1,13 +1,8 @@
 import { game } from "../game.js";
 
-/////////////////CONTROLS///////////////
 export const keys = {}; //object for keeping track of keyboard keys boolean values
 
-/////////////////SCENES/////////////////
-
 export let currentScene, components;
-
-/////////////////DISPLAY/////////////////
 
 export const resolveComponents = (newDisplayDetails) => {
   //Resolves which components should be calculated and rendered on screen
@@ -22,10 +17,9 @@ export const resolveComponents = (newDisplayDetails) => {
         scaledX < component.x + component.width &&
         component.y < scaledHeight &&
         scaledY < component.y + component.height) ||
-      component.isColliding
+      component.important
     ) {
       resolvedComponents[key] = component;
-      if (component.isColliding) component.isColliding = false;
     }
   });
 
@@ -122,7 +116,7 @@ export const cameraShake = (intensity, duration) => {
 const resolveZoom = (focus, val, reset) => {
   let amount = val;
   if (reset) amount = 1 / amount;
-  scaleValue = amount;
+  scaleValue = Math.floor(amount);
 
   const initialPx = focus.x + focus.width / 2;
   const initialPy = focus.y + focus.height / 2;
@@ -132,8 +126,11 @@ const resolveZoom = (focus, val, reset) => {
   focus.width *= amount;
   focus.height *= amount;
 
-  const dx = initialPx - (focus.x + focus.width / 2);
-  const dy = initialPy - (focus.y + focus.height / 2);
+  let dx = initialPx - (focus.x + focus.width / 2);
+  let dy = initialPy - (focus.y + focus.height / 2);
+
+  focus.x += dx;
+  focus.y += dy;
 
   game.camera.x *= amount;
   game.camera.y *= amount;
@@ -161,9 +158,6 @@ const resolveZoom = (focus, val, reset) => {
     component.x += dx;
     component.y += dy;
   });
-
-  focus.x += dx;
-  focus.y += dy;
 };
 
 let hasScaled = false;
