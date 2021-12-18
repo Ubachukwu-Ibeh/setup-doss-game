@@ -1,17 +1,7 @@
-const getRandom = (a) => Math.floor(Math.random() * a);
-
-export const cameraShake = (intensity, duration) => {
-  const arr = [];
-  for (let i = 0; i < duration; i++) {
-    const operation = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
-    arr.push(operation * getRandom(intensity));
-  }
-  return arr;
-};
-
 export class Game {
   constructor(props) {
     for (const key in props) {
+      this.pause = false;
       this[key] = props[key];
       this.cameraShakeDetails = {
         xShakeValues: [],
@@ -35,3 +25,5 @@ export class Game {
     return this;
   }
 }
+
+export const saved_game = JSON.parse(localStorage.getItem("saved-game"));

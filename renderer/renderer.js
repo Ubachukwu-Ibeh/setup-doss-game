@@ -1,7 +1,9 @@
 import { game } from "../game.js";
 import { components } from "../globals/globals.js";
 
-export const render = ({ ctx, scaledWidth, scaledHeight }) => {
+export const render = (
+  { ctx, scaledWidth, scaledHeight } = game.newDisplaySettings
+) => {
   ctx.clearRect(0, 0, scaledWidth, scaledHeight);
   ctx.fillStyle = game.backgroundColor;
   ctx.fillRect(0, 0, scaledWidth, scaledHeight);

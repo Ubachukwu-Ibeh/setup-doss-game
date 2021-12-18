@@ -4,20 +4,21 @@ export const keys = {}; //object for keeping track of keyboard keys boolean valu
 
 export let currentScene, components;
 
-export const resolveComponents = (newDisplayDetails) => {
+export const resolveComponents = () => {
   //Resolves which components should be calculated and rendered on screen
-  const { scaledX, scaledY, scaledWidth, scaledHeight } = newDisplayDetails;
+  const { scaledX, scaledY, scaledWidth, scaledHeight } =
+    game.newDisplaySettings;
 
   const resolvedComponents = {};
 
   Object.keys(components).forEach((key) => {
     const component = components[key];
     if (
+      component.important ||
       (component.x < scaledWidth &&
         scaledX < component.x + component.width &&
         component.y < scaledHeight &&
-        scaledY < component.y + component.height) ||
-      component.important
+        scaledY < component.y + component.height)
     ) {
       resolvedComponents[key] = component;
     }
@@ -94,6 +95,7 @@ const scaledHeight = displayHeight * scaleValue;
 
 game.newDisplaySettings.scaledWidth = scaledWidth;
 game.newDisplaySettings.scaledHeight = scaledHeight;
+
 game.newDisplaySettings.ctx = ctx;
 
 canvas.width = scaledWidth;
@@ -103,15 +105,7 @@ export const set = (val) => {
   return val * scaleValue;
 };
 
-const getRandom = (a) => Math.floor(Math.random() * a);
-
-export const cameraShake = (intensity, duration) => {
-  game.cameraShakeDetails[axis] = [];
-  for (let i = 0; i < duration; i++) {
-    const operation = Math.floor(Math.random() * 2) === 1 ? -1 : 1;
-    game.cameraShakeDetails[axis].push(operation * getRandom(intensity));
-  }
-};
+export const cameraShake = (arr) => arr;
 
 const resolveZoom = (focus, val, reset) => {
   let amount = val;
@@ -144,11 +138,6 @@ const resolveZoom = (focus, val, reset) => {
   currentScene.worldWidth *= amount;
   currentScene.worldHeight *= amount;
 
-  game.newDisplaySettings.scaledX = dx;
-  game.newDisplaySettings.scaledY = dy;
-  game.newDisplaySettings.scaledWidth = displayWidth * amount;
-  game.newDisplaySettings.scaledHeight = displayWidth * amount;
-
   Object.values(components).forEach((component) => {
     if (component === focus) return;
     component.x *= amount;
@@ -175,4 +164,16 @@ export const zoom = (focus, amount) => {
 
 export const addComponent = (component) => {
   components[component.id] = component;
+};
+
+export const save = () => {
+  localStorage.setItem("saved-game", JSON.stringify(game));
+};
+
+export const pause = () => {
+  game.pause = true;
+};
+
+export const play = () => {
+  game.pause = false;
 };

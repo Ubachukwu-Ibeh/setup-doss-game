@@ -1,7 +1,7 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { Boy } from "./Boy.js";
 
-const { set, Box, zoom } = BoxEngine;
+const { set, Box, zoom, pause } = BoxEngine;
 
 export const Floor = new Box({
   id: "Floor1",
@@ -22,6 +22,7 @@ const Floor2 = new Box({
   y: set(10),
   width: set(200),
   height: set(100),
+  important: true,
   dv: 0,
   v: 2,
   color: "green",
@@ -37,7 +38,7 @@ const Floor2 = new Box({
   },
 }).init();
 
-const bg = new Box({
+new Box({
   id: "bg",
   x: 0,
   y: 0,
@@ -57,8 +58,14 @@ new Box({
   width: set(400),
   height: set(200),
   color: "rgb(120,180,50)",
-  depth: 2,
+  depth: set(2),
   layer: 1,
   onCollision() {},
-  update() {},
+  update() {
+    // time += 1;
+    // if (time % 5 === 0) {
+    //   zoom(Boy, (val += 0.01));
+    // }
+  },
 }).init();
+// zoom(Boy, 2.5);

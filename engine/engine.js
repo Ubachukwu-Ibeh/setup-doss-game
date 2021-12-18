@@ -4,15 +4,15 @@ import {
   resolveComponents,
   components,
   currentScene,
-  set,
 } from "../globals/globals.js";
 
-export const engine = (newDisplayDetails) => {
-  const validComponents = resolveComponents(newDisplayDetails);
+export const engine = ({ newDisplaySettings, camera, pause } = game) => {
+  const validComponents = resolveComponents(newDisplaySettings);
   const validComponentsArray = Object.values(validComponents);
 
   const resolveControls = () => {
     validComponentsArray.forEach((component) => {
+      if (pause && component.type !== "ui") return;
       if (component.keyboardControls) {
         Object.keys(keys)
           .filter((key) => {
@@ -28,13 +28,11 @@ export const engine = (newDisplayDetails) => {
           });
       }
     });
-    //resolve touch ...
-
-    //resolve pad ...
   };
 
   const resolveUpdate = () => {
     validComponentsArray.forEach((component) => {
+      if (pause && component.type !== "ui") return;
       if (component.update) {
         component.update();
       }
@@ -43,6 +41,7 @@ export const engine = (newDisplayDetails) => {
 
   const resolveCollisions = () => {
     const rigidBodies = validComponentsArray.filter((component) => {
+      if (pause && component.type !== "ui") return;
       if (component.rigidBody === true) {
         return component;
       }
@@ -174,14 +173,15 @@ export const engine = (newDisplayDetails) => {
   };
 
   const resolveCamera = () => {
+    if (pause) return;
     const allComponents = Object.values(components);
 
     const componentsArray = allComponents.filter(
       (component) => component.type !== "ui"
     );
 
-    let { focus, x, y, width, height } = game.camera;
-    let { scaledWidth, scaledHeight } = newDisplayDetails;
+    let { focus, x, y, width, height } = camera;
+    let { scaledWidth, scaledHeight } = newDisplaySettings;
 
     const resolveFit = () => {
       //fit screen after all camera movememnts
@@ -284,6 +284,7 @@ export const engine = (newDisplayDetails) => {
 
   const resolveAnimation = () => {
     validComponentsArray.forEach((component) => {
+      if (pause && component.type !== "ui") return;
       if (component.currentAnimation) {
         const { frameTick, frameNumber, speed, currentAnimation } =
           component.animations;
