@@ -8,6 +8,9 @@ import {
   save,
   pause,
   play,
+  rotate,
+  preloadImage,
+  preloadSound,
 } from "../globals/globals.js";
 
 const BoxEngine = {
@@ -20,6 +23,9 @@ const BoxEngine = {
   save,
   pause,
   play,
+  rotate,
+  preloadImage,
+  preloadSound,
 };
 
 export default BoxEngine;

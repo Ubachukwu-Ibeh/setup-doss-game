@@ -1,24 +1,5 @@
 import { addComponent, keys } from "../globals/globals.js";
 
-const createImgElement = (src) => {
-  const image = document.createElement("img");
-  image.setAttribute("src", src);
-  return image;
-};
-
-const observe = (obj, key) => {
-  let val = obj[key];
-
-  Object.defineProperty(obj, key, {
-    get() {
-      return val;
-    },
-    set(newVal) {
-      val = createImgElement(newVal);
-    },
-  });
-};
-
 export class Box {
   constructor(props) {
     this.type = "component";
@@ -36,11 +17,7 @@ export class Box {
     }
 
     if (this.animations) {
-      this.animations.spriteSheet = createImgElement(
-        this.animations.spriteSheet
-      );
-
-      observe(this.animations, "spriteSheet");
+      this.animations.spriteSheet = this.animations.spriteSheet;
 
       this.playAnimation = (animationName) => {
         this.animations.frameTick = 0;

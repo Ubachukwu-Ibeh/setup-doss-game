@@ -2,6 +2,18 @@ import { game } from "../game.js";
 
 export const keys = {}; //object for keeping track of keyboard keys boolean values
 
+export const preloadImage = (src) => {
+  const image = document.createElement("img");
+  image.setAttribute("src", src);
+  return image;
+};
+
+export const preloadSound = (src) => {
+  const sfx = new Audio(src);
+  sfx.preload = "auto";
+  return sfx;
+};
+
 export let currentScene, components;
 
 export const resolveComponents = () => {
@@ -107,24 +119,21 @@ export const set = (val) => {
 
 export const cameraShake = (arr) => arr;
 
-const resolveZoom = (focus, val, reset) => {
+const resolveZoom = (point, val, reset) => {
   let amount = val;
   if (reset) amount = 1 / amount;
   scaleValue = Math.floor(amount);
 
-  const initialPx = focus.x + focus.width / 2;
-  const initialPy = focus.y + focus.height / 2;
+  let { x, y } = point;
 
-  focus.x *= amount;
-  focus.y *= amount;
-  focus.width *= amount;
-  focus.height *= amount;
+  const initialPx = x;
+  const initialPy = y;
 
-  let dx = initialPx - (focus.x + focus.width / 2);
-  let dy = initialPy - (focus.y + focus.height / 2);
+  x *= amount;
+  y *= amount;
 
-  focus.x += dx;
-  focus.y += dy;
+  let dx = initialPx - x;
+  let dy = initialPy - y;
 
   game.camera.x *= amount;
   game.camera.y *= amount;
@@ -139,7 +148,6 @@ const resolveZoom = (focus, val, reset) => {
   currentScene.worldHeight *= amount;
 
   Object.values(components).forEach((component) => {
-    if (component === focus) return;
     component.x *= amount;
     component.y *= amount;
     component.width *= amount;
@@ -151,19 +159,25 @@ const resolveZoom = (focus, val, reset) => {
 
 let hasScaled = false;
 
-export const zoom = (focus, amount) => {
+export const zoom = (point, amount) => {
   if (hasScaled) {
-    resolveZoom(focus, scaleValue, true);
+    resolveZoom(point, scaleValue, true);
     hasScaled = false;
-    zoom(focus, amount);
+    zoom(point, amount);
   } else {
-    resolveZoom(focus, amount);
+    resolveZoom(point, amount);
     hasScaled = true;
   }
 };
 
 export const addComponent = (component) => {
   components[component.id] = component;
+};
+
+export const rotate = ({ x, y }, angle) => {
+  ctx.translate(x, y);
+  ctx.rotate((angle * Math.PI) / 180);
+  ctx.translate(-x, -y);
 };
 
 export const save = () => {

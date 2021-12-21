@@ -40,9 +40,9 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
   };
 
   const resolveCollisions = () => {
-    const rigidBodies = validComponentsArray.filter((component) => {
+    const collisionBoxes = validComponentsArray.filter((component) => {
       if (pause && component.type !== "ui") return;
-      if (component.rigidBody === true) {
+      if (component.canCollide === true) {
         return component;
       }
     });
@@ -69,13 +69,13 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     const resolve = () => {
       let collisionDataA, collisionDataB;
 
-      for (i; i < rigidBodies.length; i++) {
+      for (i; i < collisionBoxes.length; i++) {
         j = 0;
-        for (j; j < rigidBodies.length; j++) {
+        for (j; j < collisionBoxes.length; j++) {
           if (i === j) continue;
 
-          const A = rigidBodies[i];
-          const B = rigidBodies[j];
+          const A = collisionBoxes[i];
+          const B = collisionBoxes[j];
 
           if (testForCollision(A, B)) {
             collided = true;
@@ -85,11 +85,11 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
               if (A.x < B.x) {
                 collisionDataA = { object: B, right: true };
                 collisionDataB = { object: A, left: true };
-                return A.x + A.width - B.x;
+                return A.rigidBody && B.rigidBody ? A.x + A.width - B.x : 0;
               } else {
                 collisionDataA = { object: B, left: true };
                 collisionDataB = { object: A, right: true };
-                return -(B.x + B.width - A.x);
+                return A.rigidBody && B.rigidBody ? -(B.x + B.width - A.x) : 0;
               }
             };
 
@@ -102,6 +102,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
               };
 
               const resolveRefB = () => {
+                if (!A.rigidBody) return;
                 i = j;
                 resolve();
               };
@@ -123,7 +124,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
 
             if (A.y < B.y) {
               let dx = resolveX(),
-                dy = A.y + A.height - B.y;
+                dy = A.rigidBody && B.rigidBody ? A.y + A.height - B.y : 0;
 
               if (Math.abs(dx) < dy) {
                 checkX(dx);
@@ -141,7 +142,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
               }
             } else {
               let dx = resolveX(),
-                dy = B.y + B.height - A.y;
+                dy = A.rigidBody && B.rigidBody ? B.y + B.height - A.y : 0;
 
               if (Math.abs(dx) < dy) {
                 checkX(dx);
@@ -158,7 +159,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
                 }
               }
             }
-          } else if (collided && j === rigidBodies.length - 1) {
+          } else if (collided && j === collisionBoxes.length - 1) {
             i = k;
             j = l;
             k = undefined;
@@ -256,12 +257,12 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     resolveFit(); //resolve fit after tracking.
 
     ////////////////////////SHAKE/////////////////////////////
-    const xShakeValues = game.cameraShakeDetails.xShakeValues;
-    const yShakeValues = game.cameraShakeDetails.yShakeValues;
+    const xShakeValues = game.cameraShake.xValues;
+    const yShakeValues = game.cameraShake.yValues;
 
     if (xShakeValues.length !== 0 || yShakeValues.length !== 0) {
-      let xVal = xShakeValues[xShakeValues.length - 1] || 0;
-      let yVal = yShakeValues[yShakeValues.length - 1] || 0;
+      let xVal = xShakeValues[0] || 0;
+      let yVal = yShakeValues[0] || 0;
 
       currentScene.worldX += xVal;
       currentScene.worldY += yVal;
@@ -277,8 +278,8 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
 
       resolveFit(); //resolve fit after shaking.
 
-      xShakeValues.pop();
-      yShakeValues.pop();
+      xShakeValues.shift();
+      yShakeValues.shift();
     }
   };
 

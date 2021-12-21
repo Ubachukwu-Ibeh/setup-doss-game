@@ -11,6 +11,7 @@ export const Boy = new Box({
   height: set(50),
   color: "red",
   layer: 2,
+  canCollide: true,
   rigidBody: true,
   blendMode: "overlay",
   keyboardControls: {

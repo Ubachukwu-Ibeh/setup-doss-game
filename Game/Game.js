@@ -3,9 +3,9 @@ export class Game {
     for (const key in props) {
       this.pause = false;
       this[key] = props[key];
-      this.cameraShakeDetails = {
-        xShakeValues: [],
-        yShakeValues: [],
+      this.cameraShake = {
+        xValues: [],
+        yValues: [],
       };
       this.newDisplaySettings = {
         scaledX: 0,

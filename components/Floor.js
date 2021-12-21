@@ -12,8 +12,11 @@ export const Floor = new Box({
   color: "green",
   layer: 1,
   important: true,
+  canCollide: true,
   rigidBody: true,
-  onCollision() {},
+  onCollision() {
+    // Floor.color = "red";
+  },
 }).init();
 
 const Floor2 = new Box({
@@ -23,6 +26,7 @@ const Floor2 = new Box({
   width: set(200),
   height: set(100),
   important: true,
+  canCollide: true,
   dv: 0,
   v: 2,
   color: "green",
