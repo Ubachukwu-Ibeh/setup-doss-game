@@ -122,7 +122,8 @@ export const cameraShake = (arr) => arr;
 const resolveZoom = (point, val, reset) => {
   let amount = val;
   if (reset) amount = 1 / amount;
-  scaleValue = Math.floor(amount);
+
+  scaleValue = amount;
 
   let { x, y } = point;
 
@@ -175,6 +176,7 @@ export const addComponent = (component) => {
 };
 
 export const rotate = ({ x, y }, angle) => {
+  ctx.save();
   ctx.translate(x, y);
   ctx.rotate((angle * Math.PI) / 180);
   ctx.translate(-x, -y);

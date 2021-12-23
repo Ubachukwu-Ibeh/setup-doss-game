@@ -17,12 +17,10 @@ export class Box {
     }
 
     if (this.animations) {
-      this.animations.spriteSheet = this.animations.spriteSheet;
-
       this.playAnimation = (animationName) => {
         this.animations.frameTick = 0;
         this.animations.frameNumber = 0;
-        this.animations.currentAnimation = this.animations[animationName];
+        this.animations.currentAnimation = animationName;
       };
     }
 

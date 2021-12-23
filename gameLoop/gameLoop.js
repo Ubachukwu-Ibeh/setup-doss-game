@@ -10,6 +10,8 @@ export const gameLoop = () => {
 
   Engine.resolveCollisions();
 
+  Engine.resolveAnimation();
+
   Engine.resolveCamera();
 
   render();

@@ -13,6 +13,7 @@ export const render = (
   tray.sort((A, B) => A.layer - B.layer);
 
   tray.forEach((component) => {
+    //show camera
     if (component.id === "Boy") {
       const { x, y, width, height } = game.camera;
 
@@ -25,6 +26,7 @@ export const render = (
     if (component.blendMode) {
       ctx.globalCompositeOperation = component.blendMode;
     }
+
     if (color) {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, width, height);
@@ -33,10 +35,28 @@ export const render = (
       const { currentFrame, spriteSheet } = component.animations;
 
       if (currentFrame) {
-        const [sx, sy, sw, sh, ix, iy, iw, ih] = currentFrame;
-        ctx.drawImage(spriteSheet, sx, sy, sw, sh, ix, iy, iw, ih);
+        let [sx, sy, sw, sh, ix, iy, iw, ih] = currentFrame;
+        const flipAxis = component.animations.flip;
+
+        if (flipAxis) {
+          ctx.save();
+          if (flipAxis === "x") {
+            ctx.translate(ix, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(spriteSheet, sx, sy, sw, sh, -iw, iy, iw, ih);
+          }
+          if (flipAxis === "y") {
+            ctx.translate(0, iy);
+            ctx.scale(1, -1);
+            ctx.drawImage(spriteSheet, sx, sy, sw, sh, ix, -ih, iw, ih);
+          }
+        } else {
+          ctx.drawImage(spriteSheet, sx, sy, sw, sh, ix, iy, iw, ih);
+        }
       }
     }
+
+    ctx.restore();
     ctx.globalCompositeOperation = "normal";
   });
 };

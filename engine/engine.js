@@ -182,6 +182,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     );
 
     let { focus, x, y, width, height } = camera;
+    if (!focus) return;
     let { scaledWidth, scaledHeight } = newDisplaySettings;
 
     const resolveFit = () => {
@@ -286,14 +287,15 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
   const resolveAnimation = () => {
     validComponentsArray.forEach((component) => {
       if (pause && component.type !== "ui") return;
-      if (component.currentAnimation) {
+      if (component.animations && component.animations.currentAnimation) {
         const { frameTick, frameNumber, speed, currentAnimation } =
           component.animations;
 
-        if (frameTick % speed || 1 === 0) {
-          component.animations.currentFrame = currentAnimation[frameNumber];
+        if (frameTick % (speed || 1) === 0) {
+          const playingAnimation = component.animations[currentAnimation];
+          component.animations.currentFrame = playingAnimation[frameNumber];
           component.animations.frameNumber =
-            (frameNumber + 1) % currentAnimation.length;
+            (frameNumber + 1) % playingAnimation.length;
 
           component.animations.frameTick = 0;
         }

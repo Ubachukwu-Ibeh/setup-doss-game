@@ -65,11 +65,14 @@ new Box({
   depth: set(2),
   layer: 1,
   onCollision() {},
-  update() {
-    // time += 1;
-    // if (time % 5 === 0) {
-    //   zoom(Boy, (val += 0.01));
-    // }
-  },
+  update() {},
 }).init();
-// zoom(Boy, 2.5);
+
+// const interval = setInterval(() => {
+//   time += 1;
+//   if (time % 5 === 0) {
+//     val += 0.01;
+//     zoom(Boy, val);
+//   }
+// }, 10);
+// zoom(Boy, 2);
