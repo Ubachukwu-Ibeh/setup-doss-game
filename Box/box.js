@@ -17,7 +17,16 @@ export class Box {
     }
 
     if (this.animations) {
+      this.animations.frameTick = 0;
+      this.animations.frameNumber = 0;
+      this.animations.done = true;
+
       this.playAnimation = (animationName) => {
+        const isPrevious = this.animations.currentAnimation === animationName;
+        const isImportant = this.animations[animationName].important;
+        const isDone = this.animations.done;
+
+        if (isPrevious || (!isImportant && !isDone)) return;
         this.animations.frameTick = 0;
         this.animations.frameNumber = 0;
         this.animations.currentAnimation = animationName;

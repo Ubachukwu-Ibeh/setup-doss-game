@@ -2,14 +2,15 @@ import { spriteSheetData } from "../assets/spritesheet.js";
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-const { set, Box, preloadImage } = BoxEngine;
+const { set, Box, zoom, preloadImage } = BoxEngine;
 
 let animData = JSON.parse(spriteSheetData);
 let spriteSheet = preloadImage("./assets/spritesheet.png");
 
 const img = (val) => animData.frames[val].frame;
 
-let otherAnimations;
+let time = 0,
+  val = 1;
 
 export const Boy = new Box({
   id: "Boy",
@@ -19,6 +20,11 @@ export const Boy = new Box({
   height: set(img(0).h),
   animations: {
     spriteSheet,
+    speed: 6,
+    idle: {},
+    punch: {
+      important: true,
+    },
   },
   // color: "red",
   layer: 2,
@@ -26,29 +32,34 @@ export const Boy = new Box({
   rigidBody: true,
   // blendMode: "overlay",
   update() {
-    if (!otherAnimations) {
-      Boy.playAnimation("idle");
-      otherAnimations = true;
-    }
+    Boy.animations.idle.frames = () => getFrames(0, 0);
 
-    // Boy.width = set(img(0).w);
-    // Boy.height = set(img(0).h);
+    Boy.playAnimation("idle");
 
-    const idle = getFrames(0, 0);
-    Boy.animations.idle = idle;
+    // time += 1;
+    // if (time % 5 === 0) {
+    //   val += 0.01;
+    //   zoom(Boy, val);
+    //   time = 0;
+    // }
   },
   keyboardControls: {
     ArrowRight() {
-      Boy.x += set(10);
+      Boy.x += set(20);
     },
     ArrowDown() {
-      Boy.y += set(10);
+      Boy.y += set(20);
     },
     ArrowUp() {
-      Boy.y -= set(10);
+      Boy.y -= set(20);
     },
     ArrowLeft() {
-      Boy.x -= set(10);
+      Boy.x -= set(20);
+    },
+    d() {
+      Boy.animations.punch.frames = () => getFrames(1, 3);
+
+      Boy.playAnimation("punch");
     },
   },
   onCollision() {},

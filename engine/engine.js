@@ -288,16 +288,27 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     validComponentsArray.forEach((component) => {
       if (pause && component.type !== "ui") return;
       if (component.animations && component.animations.currentAnimation) {
+        component.animations.done = false;
+
         const { frameTick, frameNumber, speed, currentAnimation } =
           component.animations;
 
-        if (frameTick % (speed || 1) === 0) {
-          const playingAnimation = component.animations[currentAnimation];
-          component.animations.currentFrame = playingAnimation[frameNumber];
-          component.animations.frameNumber =
-            (frameNumber + 1) % playingAnimation.length;
+        const playingAnimation =
+          component.animations[currentAnimation].frames();
 
-          component.animations.frameTick = 0;
+        component.animations.currentFrame = playingAnimation[frameNumber];
+
+        if (frameTick % (speed || 1) === 0) {
+          component.animations.currentFrame = playingAnimation[frameNumber]; //for renderer to render current frame
+          const nextFrame = (frameNumber + 1) % playingAnimation.length;
+          component.animations.frameNumber = nextFrame;
+
+          if (nextFrame === 0) {
+            component.animations.done = true;
+
+            component.animations.frameTick = 0;
+            component.animations.frameNumber = 0;
+          }
         }
         component.animations.frameTick += 1;
       }

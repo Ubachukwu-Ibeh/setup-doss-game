@@ -10,7 +10,7 @@ export const Floor = new Box({
   width: set(200),
   height: set(200),
   color: "green",
-  layer: 1,
+  layer: 2,
   important: true,
   canCollide: true,
   rigidBody: true,
@@ -22,7 +22,7 @@ export const Floor = new Box({
 const Floor2 = new Box({
   id: "Floor2",
   x: set(700),
-  y: set(10),
+  y: set(500),
   width: set(200),
   height: set(100),
   important: true,
@@ -30,16 +30,16 @@ const Floor2 = new Box({
   dv: 0,
   v: 2,
   color: "green",
-  layer: 1,
+  layer: 2,
   rigidBody: true,
-  onCollision() {
-    Floor2.dv = 0;
-    Floor2.v = 0;
-  },
-  update() {
-    Floor2.dv += 1;
-    Floor2.y += set(Floor2.v + Floor2.dv);
-  },
+  // onCollision() {
+  //   Floor2.dv = 0;
+  //   Floor2.v = 0;
+  // },
+  // update() {
+  //   Floor2.dv += 1;
+  //   Floor2.y += set(Floor2.v + Floor2.dv);
+  // },
 }).init();
 
 new Box({
@@ -51,9 +51,6 @@ new Box({
   color: "yellowgreen",
   layer: -1,
 }).init();
-
-let time = 0,
-  val = 1;
 
 new Box({
   id: "Floor3",
@@ -67,12 +64,4 @@ new Box({
   onCollision() {},
   update() {},
 }).init();
-
-// const interval = setInterval(() => {
-//   time += 1;
-//   if (time % 5 === 0) {
-//     val += 0.01;
-//     zoom(Boy, val);
-//   }
-// }, 10);
 // zoom(Boy, 2);
