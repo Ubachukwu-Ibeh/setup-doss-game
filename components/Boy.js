@@ -2,15 +2,15 @@ import { spriteSheetData } from "../assets/spritesheet.js";
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-const { set, Box, zoom, preloadImage } = BoxEngine;
+const { set, Box, zoom, preloadImage, scaleValue } = BoxEngine;
 
 let animData = JSON.parse(spriteSheetData);
 let spriteSheet = preloadImage("./assets/spritesheet.png");
 
 const img = (val) => animData.frames[val].frame;
 
-let time = 0,
-  val = 1;
+let time = 0;
+let val = 1;
 
 export const Boy = new Box({
   id: "Boy",
@@ -32,37 +32,50 @@ export const Boy = new Box({
   rigidBody: true,
   // blendMode: "overlay",
   update() {
-    Boy.animations.idle.frames = () => getFrames(0, 0);
+    time += 1;
+    if (time % 5 === 0) {
+      val += 0.005;
+      zoom(Boy, val);
+      time = 0;
+    }
+
+    const idle = getFrames(0, 0);
+
+    if (idle[Boy.animations.frameNumber]) {
+      Boy.width = set(idle[Boy.animations.frameNumber][2]);
+      Boy.height = set(idle[Boy.animations.frameNumber][3]);
+    }
+
+    Boy.animations.idle.frames = () => idle;
 
     Boy.playAnimation("idle");
-
-    // time += 1;
-    // if (time % 5 === 0) {
-    //   val += 0.01;
-    //   zoom(Boy, val);
-    //   time = 0;
-    // }
   },
   keyboardControls: {
     ArrowRight() {
-      Boy.x += set(20);
+      Boy.animations.flip = "x";
+      Boy.x += set(15);
     },
     ArrowDown() {
-      Boy.y += set(20);
+      Boy.y += set(15);
     },
     ArrowUp() {
-      Boy.y -= set(20);
+      Boy.y -= set(15);
     },
     ArrowLeft() {
-      Boy.x -= set(20);
+      Boy.animations.flip = false;
+      Boy.x -= set(15);
     },
     d() {
-      Boy.animations.punch.frames = () => getFrames(1, 3);
+      const punch = getFrames(1, 3);
+
+      Boy.width = set(punch[Boy.animations.frameNumber][2]);
+      Boy.height = set(punch[Boy.animations.frameNumber][3]);
+
+      Boy.animations.punch.frames = () => punch;
 
       Boy.playAnimation("punch");
     },
   },
-  onCollision() {},
 }).init();
 
 game.camera = {
@@ -71,6 +84,7 @@ game.camera = {
   y: set(600) - Boy.height / 3,
   width: 2 * (Boy.width / 3) + Boy.width,
   height: 2 * (Boy.height / 3) + Boy.height,
+  view: true,
 };
 
 const getFrames = (a, b) => {

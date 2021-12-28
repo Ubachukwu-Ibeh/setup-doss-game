@@ -14,11 +14,18 @@ export const render = (
 
   tray.forEach((component) => {
     //show camera
-    if (component.id === "Boy") {
-      const { x, y, width, height } = game.camera;
+    const {
+      focus,
+      x: camX,
+      y: camY,
+      width: camWidth,
+      height: camHeight,
+      view,
+    } = game.camera;
 
+    if (view && component === focus) {
       ctx.fillStyle = "pink";
-      ctx.fillRect(x, y, width, height);
+      ctx.fillRect(camX, camY, camWidth, camHeight);
     }
 
     const { x, y, width, height, color } = component;

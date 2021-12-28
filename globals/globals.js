@@ -2,6 +2,13 @@ import { game } from "../game.js";
 
 export const keys = {}; //object for keeping track of keyboard keys boolean values
 
+window.addEventListener("keydown", (e) => {
+  keys[e.key] = true;
+});
+window.addEventListener("keyup", (e) => {
+  keys[e.key] = false;
+});
+
 export const preloadImage = (src) => {
   const image = document.createElement("img");
   image.setAttribute("src", src);
@@ -78,7 +85,7 @@ const getScaleValue = () => {
   }
 };
 
-let scaleValue = getScaleValue();
+export let scaleValue = getScaleValue();
 game.originalScaleValue = scaleValue;
 
 export const addScenes = (name, scene) => {
@@ -143,8 +150,8 @@ const resolveZoom = (point, val, reset) => {
   game.camera.x += dx;
   game.camera.y += dy;
 
-  currentScene.worldX = dx;
-  currentScene.worldY = dy;
+  currentScene.worldX *= amount;
+  currentScene.worldY *= amount;
   currentScene.worldWidth *= amount;
   currentScene.worldHeight *= amount;
 

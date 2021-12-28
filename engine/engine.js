@@ -1,9 +1,11 @@
+import { bg } from "../components/Floor.js";
 import { game } from "../game.js";
 import {
   keys,
   resolveComponents,
   components,
   currentScene,
+  set,
 } from "../globals/globals.js";
 
 export const engine = ({ newDisplaySettings, camera, pause } = game) => {
@@ -15,11 +17,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
       if (pause && component.type !== "ui") return;
       if (component.keyboardControls) {
         Object.keys(keys)
-          .filter((key) => {
-            if (keys[key] === true) {
-              return key;
-            }
-          })
+          .filter((key) => keys[key] === true)
           .forEach((key) => {
             const cmd = component.keyboardControls[key];
             if (cmd) {
@@ -182,13 +180,16 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     );
 
     let { focus, x, y, width, height } = camera;
+
     if (!focus) return;
+
     let { scaledWidth, scaledHeight } = newDisplaySettings;
 
     const resolveFit = () => {
       //fit screen after all camera movememnts
       let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 
+      // console.log(worldX);
       if (worldX > 0) {
         let dx = -worldX;
         currentScene.worldX += dx;
@@ -250,6 +251,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     if (focus.y + focus.height > y + height) {
       let dy = focus.y + focus.height - (y + height);
       currentScene.worldY -= dy;
+
       componentsArray.forEach((component) => {
         component.y -= dy / component.depth;
       });

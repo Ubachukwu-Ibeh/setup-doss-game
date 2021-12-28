@@ -11,6 +11,8 @@ import {
   rotate,
   preloadImage,
   preloadSound,
+  scaleValue,
+  currentScene,
 } from "../globals/globals.js";
 
 const BoxEngine = {
@@ -26,6 +28,8 @@ const BoxEngine = {
   rotate,
   preloadImage,
   preloadSound,
+  scaleValue,
+  currentScene,
 };
 
 export default BoxEngine;

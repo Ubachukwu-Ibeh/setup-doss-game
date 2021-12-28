@@ -1,7 +1,8 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
+import { game } from "../game.js";
 import { Boy } from "./Boy.js";
 
-const { set, Box, zoom, pause } = BoxEngine;
+const { set, Box, zoom, pause, scaleValue } = BoxEngine;
 
 export const Floor = new Box({
   id: "Floor1",
@@ -19,10 +20,13 @@ export const Floor = new Box({
   },
 }).init();
 
+let time = 0;
+let val = 1;
+
 const Floor2 = new Box({
   id: "Floor2",
   x: set(700),
-  y: set(500),
+  y: set(70),
   width: set(200),
   height: set(100),
   important: true,
@@ -32,24 +36,20 @@ const Floor2 = new Box({
   color: "green",
   layer: 2,
   rigidBody: true,
-  // onCollision() {
-  //   Floor2.dv = 0;
-  //   Floor2.v = 0;
-  // },
-  // update() {
-  //   Floor2.dv += 1;
-  //   Floor2.y += set(Floor2.v + Floor2.dv);
-  // },
-}).init();
-
-new Box({
-  id: "bg",
-  x: 0,
-  y: 0,
-  width: set(3000),
-  height: set(2000),
-  color: "yellowgreen",
-  layer: -1,
+  onCollision() {
+    Floor2.dv = 0;
+    Floor2.v = 0;
+  },
+  update() {
+    Floor2.dv += 1;
+    Floor2.y += set(Floor2.v + Floor2.dv);
+    // time += 1;
+    // if (time % 5 === 0) {
+    //   val += 0.01;
+    //   zoom(Boy, val);
+    //   time = 0;
+    // }
+  },
 }).init();
 
 new Box({
@@ -64,4 +64,13 @@ new Box({
   onCollision() {},
   update() {},
 }).init();
-// zoom(Boy, 2);
+
+export const bg = new Box({
+  id: "bg",
+  x: 0,
+  y: 0,
+  width: set(3000),
+  height: set(2000),
+  color: "yellowgreen",
+  layer: -1,
+}).init();
