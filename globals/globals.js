@@ -211,21 +211,39 @@ export const handleAnimation = (component, framesArr) => {
     component.width = set(frames[component.animations.frameNumber][2]);
     component.height = set(frames[component.animations.frameNumber][3]);
 
-    if (!component.animations.flip) {
+    const resolveXAxis = () => {
       if (currW < component.width) {
         component.x -= component.width - currW;
       }
       if (currW > component.width) {
         component.x += currW - component.width;
       }
+    };
+
+    const resolveYAxis = () => {
       if (currH < component.height) {
         component.y -= component.height - currH;
       }
       if (currH > component.height) {
         component.y += currH - component.height;
       }
+    };
+
+    if (!component.animations.flip) {
+      resolveXAxis();
+      resolveYAxis();
     }
 
+    if (component.animations.flip === "x") {
+      resolveYAxis();
+    }
+
+    if (component.animations.flip === "y") {
+      resolveXAxis();
+    }
+
+    frames[component.animations.frameNumber][4] = component.x;
+    frames[component.animations.frameNumber][5] = component.y;
     frames[component.animations.frameNumber][6] = component.width;
     frames[component.animations.frameNumber][7] = component.height;
 

@@ -31,7 +31,7 @@ export const Boy = new Box({
       importance: 2,
     },
   },
-  color: "red",
+  // color: "red",
   layer: 2,
   canCollide: true,
   rigidBody: true,
