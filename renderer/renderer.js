@@ -43,6 +43,7 @@ export const render = (
 
       if (currentFrame) {
         let [sx, sy, sw, sh, ix, iy, iw, ih] = currentFrame;
+
         const flipAxis = component.animations.flip;
 
         if (flipAxis) {

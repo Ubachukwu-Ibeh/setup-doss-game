@@ -8,17 +8,27 @@ export class Box {
   }
   init() {
     if (this.animations) {
-      this.animations.frameTick = 0;
+      this.animations.frameTick = 1;
       this.animations.frameNumber = 0;
       this.animations.done = true;
 
       this.playAnimation = (animationName) => {
         const isPrevious = this.animations.currentAnimation === animationName;
-        const isImportant = this.animations[animationName].important;
+        const currImportance = this.animations[animationName].importance;
+
+        let prevImportance;
+
+        if (this.animations.currentAnimation) {
+          prevImportance =
+            this.animations[this.animations.currentAnimation].importance;
+        } else {
+          prevImportance = 0;
+        }
+
         const isDone = this.animations.done;
 
-        if (isPrevious || (!isImportant && !isDone)) return;
-        this.animations.frameTick = 0;
+        if (isPrevious || (prevImportance >= currImportance && !isDone)) return;
+        this.animations.frameTick = 1;
         this.animations.frameNumber = 0;
         this.animations.currentAnimation = animationName;
       };

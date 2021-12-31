@@ -13,6 +13,7 @@ import {
   preloadSound,
   scaleValue,
   currentScene,
+  handleAnimation,
 } from "../globals/globals.js";
 
 const BoxEngine = {
@@ -30,6 +31,7 @@ const BoxEngine = {
   preloadSound,
   scaleValue,
   currentScene,
+  handleAnimation,
 };
 
 export default BoxEngine;

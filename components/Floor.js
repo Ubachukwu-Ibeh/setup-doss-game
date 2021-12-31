@@ -26,7 +26,7 @@ let val = 1;
 const Floor2 = new Box({
   id: "Floor2",
   x: set(700),
-  y: set(70),
+  y: set(500),
   width: set(200),
   height: set(100),
   important: true,
@@ -37,18 +37,12 @@ const Floor2 = new Box({
   layer: 2,
   rigidBody: true,
   onCollision() {
-    Floor2.dv = 0;
-    Floor2.v = 0;
+    // Floor2.dv = 0;
+    // Floor2.v = 0;
   },
   update() {
-    Floor2.dv += 1;
-    Floor2.y += set(Floor2.v + Floor2.dv);
-    // time += 1;
-    // if (time % 5 === 0) {
-    //   val += 0.01;
-    //   zoom(Boy, val);
-    //   time = 0;
-    // }
+    // Floor2.dv += 1;
+    // Floor2.y += set(Floor2.v + Floor2.dv);
   },
 }).init();
 

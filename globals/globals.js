@@ -86,7 +86,6 @@ const getScaleValue = () => {
 };
 
 export let scaleValue = getScaleValue();
-game.originalScaleValue = scaleValue;
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
@@ -128,6 +127,7 @@ export const cameraShake = (arr) => arr;
 
 const resolveZoom = (point, val, reset) => {
   let amount = val;
+
   if (reset) amount = 1 / amount;
 
   scaleValue = amount;
@@ -199,4 +199,36 @@ export const pause = () => {
 
 export const play = () => {
   game.pause = false;
+};
+
+export const handleAnimation = (component, framesArr) => {
+  const frames = framesArr;
+
+  if (frames[component.animations.frameNumber]) {
+    let currW = component.width;
+    let currH = component.height;
+
+    component.width = set(frames[component.animations.frameNumber][2]);
+    component.height = set(frames[component.animations.frameNumber][3]);
+
+    if (!component.animations.flip) {
+      if (currW < component.width) {
+        component.x -= component.width - currW;
+      }
+      if (currW > component.width) {
+        component.x += currW - component.width;
+      }
+      if (currH < component.height) {
+        component.y -= component.height - currH;
+      }
+      if (currH > component.height) {
+        component.y += currH - component.height;
+      }
+    }
+
+    frames[component.animations.frameNumber][6] = component.width;
+    frames[component.animations.frameNumber][7] = component.height;
+
+    return frames;
+  }
 };

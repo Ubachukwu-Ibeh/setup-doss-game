@@ -2,7 +2,7 @@ import { spriteSheetData } from "../assets/spritesheet.js";
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-const { set, Box, zoom, preloadImage, scaleValue } = BoxEngine;
+const { set, Box, zoom, preloadImage, scaleValue, handleAnimation } = BoxEngine;
 
 let animData = JSON.parse(spriteSheetData);
 let spriteSheet = preloadImage("./assets/spritesheet.png");
@@ -10,7 +10,7 @@ let spriteSheet = preloadImage("./assets/spritesheet.png");
 const img = (val) => animData.frames[val].frame;
 
 let time = 0;
-let val = 1;
+let val = scaleValue;
 
 export const Boy = new Box({
   id: "Boy",
@@ -21,32 +21,29 @@ export const Boy = new Box({
   animations: {
     spriteSheet,
     speed: 6,
-    idle: {},
+    idle: {
+      importance: 0,
+    },
     punch: {
-      important: true,
+      importance: 1,
+    },
+    turn: {
+      importance: 2,
     },
   },
-  // color: "red",
+  color: "red",
   layer: 2,
   canCollide: true,
   rigidBody: true,
   // blendMode: "overlay",
   update() {
-    time += 1;
-    if (time % 5 === 0) {
-      val += 0.005;
-      zoom(Boy, val);
-      time = 0;
-    }
-
-    const idle = getFrames(0, 0);
-
-    if (idle[Boy.animations.frameNumber]) {
-      Boy.width = set(idle[Boy.animations.frameNumber][2]);
-      Boy.height = set(idle[Boy.animations.frameNumber][3]);
-    }
-
-    Boy.animations.idle.frames = () => idle;
+    // time += 1;
+    // if (time % 5 === 0) {
+    //   val += 0.005;
+    //   zoom(Boy, val);
+    //   time = 0;
+    // }
+    Boy.animations.idle.frames = () => handleAnimation(Boy, getFrames(0, 0));
 
     Boy.playAnimation("idle");
   },
@@ -66,14 +63,14 @@ export const Boy = new Box({
       Boy.x -= set(15);
     },
     d() {
-      const punch = getFrames(1, 3);
-
-      Boy.width = set(punch[Boy.animations.frameNumber][2]);
-      Boy.height = set(punch[Boy.animations.frameNumber][3]);
-
-      Boy.animations.punch.frames = () => punch;
+      Boy.animations.punch.frames = () => handleAnimation(Boy, getFrames(1, 3));
 
       Boy.playAnimation("punch");
+    },
+    s() {
+      Boy.animations.turn.frames = () => handleAnimation(Boy, getFrames(4, 9));
+
+      Boy.playAnimation("turn");
     },
   },
 }).init();

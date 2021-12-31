@@ -3,8 +3,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0000_Layer-2.png",
 			"frame": {
-				"x": 0,
-				"y": 0,
+				"x": 10,
+				"y": 10,
 				"w": 135,
 				"h": 264
 			},
@@ -24,8 +24,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0001_Layer-3.png",
 			"frame": {
-				"x": 135,
-				"y": 0,
+				"x": 165,
+				"y": 10,
 				"w": 138,
 				"h": 259
 			},
@@ -45,8 +45,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0002_Layer-4.png",
 			"frame": {
-				"x": 273,
-				"y": 0,
+				"x": 323,
+				"y": 10,
 				"w": 259,
 				"h": 249
 			},
@@ -66,8 +66,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0003_Layer-5.png",
 			"frame": {
-				"x": 532,
-				"y": 0,
+				"x": 602,
+				"y": 10,
 				"w": 247,
 				"h": 252
 			},
@@ -87,8 +87,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0004_Layer-6.png",
 			"frame": {
-				"x": 779,
-				"y": 0,
+				"x": 869,
+				"y": 10,
 				"w": 138,
 				"h": 252
 			},
@@ -108,8 +108,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0005_Layer-7.png",
 			"frame": {
-				"x": 917,
-				"y": 0,
+				"x": 1027,
+				"y": 10,
 				"w": 78,
 				"h": 255
 			},
@@ -129,8 +129,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0006_Layer-8.png",
 			"frame": {
-				"x": 995,
-				"y": 0,
+				"x": 1125,
+				"y": 10,
 				"w": 154,
 				"h": 254
 			},
@@ -150,8 +150,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0007_Layer-9.png",
 			"frame": {
-				"x": 1149,
-				"y": 0,
+				"x": 1299,
+				"y": 10,
 				"w": 159,
 				"h": 251
 			},
@@ -171,8 +171,8 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0008_Layer-10.png",
 			"frame": {
-				"x": 1308,
-				"y": 0,
+				"x": 1478,
+				"y": 10,
 				"w": 179,
 				"h": 255
 			},
@@ -192,8 +192,29 @@ export const spriteSheetData = `{
 		{
 			"filename": "jun-yi-physonia-attack-frames_0000s_0009_Layer-11.png",
 			"frame": {
-				"x": 1487,
+				"x": 1677,
+				"y": 10,
+				"w": 143,
+				"h": 255
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
 				"y": 0,
+				"w": 143,
+				"h": 255
+			},
+			"sourceSize": {
+				"w": 143,
+				"h": 255
+			}
+		},
+		{
+			"filename": "jun-yi-physonia-attack-frames_0000s_0010_Layer-12.png",
+			"frame": {
+				"x": 1840,
+				"y": 10,
 				"w": 143,
 				"h": 255
 			},
@@ -217,8 +238,8 @@ export const spriteSheetData = `{
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 1630,
-			"h": 264
+			"w": 1993,
+			"h": 284
 		},
 		"scale": "1"
 	}
