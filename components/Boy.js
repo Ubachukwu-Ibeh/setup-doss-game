@@ -10,7 +10,7 @@ let spriteSheet = preloadImage("./assets/spritesheet.png");
 const img = (val) => animData.frames[val].frame;
 
 let time = 0;
-let val = scaleValue;
+let val = 1;
 
 export const Boy = new Box({
   id: "Boy",
@@ -81,7 +81,7 @@ game.camera = {
   y: set(600) - Boy.height / 3,
   width: 2 * (Boy.width / 3) + Boy.width,
   height: 2 * (Boy.height / 3) + Boy.height,
-  view: true,
+  // view: true,
 };
 
 const getFrames = (a, b) => {

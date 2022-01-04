@@ -85,7 +85,8 @@ const getScaleValue = () => {
   }
 };
 
-export let scaleValue = getScaleValue();
+const osv = getScaleValue();
+export let scaleValue = osv;
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
@@ -150,10 +151,12 @@ const resolveZoom = (point, val, reset) => {
   game.camera.x += dx;
   game.camera.y += dy;
 
+  console.log(currentScene.worldX);
   currentScene.worldX *= amount;
   currentScene.worldY *= amount;
   currentScene.worldWidth *= amount;
   currentScene.worldHeight *= amount;
+  console.log(currentScene.worldX);
 
   Object.values(components).forEach((component) => {
     component.x *= amount;
