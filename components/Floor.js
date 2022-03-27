@@ -16,9 +16,6 @@ export const Floor = new Box({
   canCollide: true,
   rigidBody: true,
   static: true,
-  onCollision() {
-    // Floor.color = "red";
-  },
 }).init();
 
 let time = 0;
@@ -27,24 +24,16 @@ let val = 1;
 const Floor2 = new Box({
   id: "Floor2",
   x: set(700),
-  y: set(70),
+  y: set(300),
   width: set(200),
   height: set(100),
   important: true,
   canCollide: true,
   dv: 0,
   v: 2,
-  color: "green",
+  color: "brown",
   layer: 2,
   rigidBody: true,
-  onCollision() {
-    Floor2.dv = 0;
-    Floor2.v = 0;
-  },
-  update() {
-    Floor2.dv += 1;
-    Floor2.y += set(Floor2.v + Floor2.dv);
-  },
 }).init();
 
 new Box({

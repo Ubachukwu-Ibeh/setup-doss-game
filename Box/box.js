@@ -1,4 +1,4 @@
-import { addComponent, keys } from "../globals/globals.js";
+import { addComponent, observe } from "../globals/globals.js";
 
 export class Box {
   constructor(props) {

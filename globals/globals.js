@@ -86,7 +86,33 @@ const getScaleValue = () => {
 };
 
 const osv = getScaleValue();
+
 export let scaleValue = osv;
+
+const pptyOpt = {
+  x: true,
+  y: true,
+  width: true,
+  height: true,
+};
+
+export const observe = (obj, key) => {
+  if (!pptyOpt[key]) return;
+
+  let imp; //(important) for checking if value has been set for scaling
+
+  let val = obj[key];
+  Object.defineProperty(obj, key, {
+    get() {
+      const res = imp / scaleValue;
+      return res ? res : val;
+    },
+    set(newVal) {
+      val = newVal * scaleValue;
+      imp = val;
+    },
+  });
+};
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
@@ -126,14 +152,14 @@ export const set = (val) => {
 
 export const cameraShake = (arr) => arr;
 
-const resolveZoom = (point, val, reset) => {
+const resolveZoom = (obj, val, reset) => {
   let amount = val;
 
   if (reset) amount = 1 / amount;
 
   scaleValue = amount;
 
-  let { x, y } = point;
+  let { x, y } = obj;
 
   const initialPx = x;
   const initialPy = y;
@@ -151,12 +177,10 @@ const resolveZoom = (point, val, reset) => {
   game.camera.x += dx;
   game.camera.y += dy;
 
-  console.log(currentScene.worldX);
   currentScene.worldX *= amount;
   currentScene.worldY *= amount;
   currentScene.worldWidth *= amount;
   currentScene.worldHeight *= amount;
-  console.log(currentScene.worldX);
 
   Object.values(components).forEach((component) => {
     component.x *= amount;
@@ -170,13 +194,13 @@ const resolveZoom = (point, val, reset) => {
 
 let hasScaled = false;
 
-export const zoom = (point, amount) => {
+export const zoom = (obj, amount) => {
   if (hasScaled) {
-    resolveZoom(point, scaleValue, true);
+    resolveZoom(obj, scaleValue, true);
     hasScaled = false;
-    zoom(point, amount);
+    zoom(obj, amount);
   } else {
-    resolveZoom(point, amount);
+    resolveZoom(obj, amount);
     hasScaled = true;
   }
 };
@@ -211,8 +235,14 @@ export const handleAnimation = (component, framesArr) => {
     let currW = component.width;
     let currH = component.height;
 
-    component.width = set(frames[component.animations.frameNumber][2]);
-    component.height = set(frames[component.animations.frameNumber][3]);
+    let factor = osv;
+
+    if (scaleValue !== osv) {
+      factor = scaleValue * osv;
+    }
+
+    component.width = factor * frames[component.animations.frameNumber][2];
+    component.height = factor * frames[component.animations.frameNumber][3];
 
     const resolveXAxis = () => {
       if (currW < component.width) {

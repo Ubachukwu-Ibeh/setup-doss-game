@@ -43,6 +43,7 @@ export const Boy = new Box({
     //   zoom(Boy, val);
     //   time = 0;
     // }
+
     Boy.animations.idle.frames = () => handleAnimation(Boy, getFrames(0, 0));
 
     Boy.playAnimation("idle");
