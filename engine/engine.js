@@ -1,4 +1,3 @@
-import { bg } from "../components/Floor.js";
 import { game } from "../game.js";
 import {
   keys,
@@ -189,7 +188,6 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
       //fit screen after all camera movememnts
       let { worldX, worldY, worldWidth, worldHeight } = currentScene;
 
-      // console.log(worldX);
       if (worldX > 0) {
         let dx = -worldX;
         currentScene.worldX += dx;

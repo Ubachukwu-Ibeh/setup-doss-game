@@ -2,7 +2,7 @@ import { spriteSheetData } from "../assets/spritesheet.js";
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
 
-const { set, Box, zoom, preloadImage, scaleValue, handleAnimation } = BoxEngine;
+const { set, Box, zoom, preloadImage, handleAnimation, rotate } = BoxEngine;
 
 let animData = JSON.parse(spriteSheetData);
 let spriteSheet = preloadImage("./assets/spritesheet.png");
@@ -15,12 +15,12 @@ let val = 1;
 export const Boy = new Box({
   id: "Boy",
   x: set(1200),
-  y: set(600),
+  y: set(0),
   width: set(img(0).w),
   height: set(img(0).h),
   animations: {
     spriteSheet,
-    speed: 6,
+    speed: 4,
     idle: {
       importance: 0,
     },
@@ -35,6 +35,9 @@ export const Boy = new Box({
   layer: 2,
   canCollide: true,
   rigidBody: true,
+  important: true,
+  dv: 0,
+  jumpForce: set(50),
   // blendMode: "overlay",
   update() {
     // time += 1;
@@ -43,6 +46,9 @@ export const Boy = new Box({
     //   zoom(Boy, val);
     //   time = 0;
     // }
+
+    Boy.dv += 1;
+    Boy.y += Boy.dv;
 
     Boy.animations.idle.frames = () => handleAnimation(Boy, getFrames(0, 0));
 
@@ -57,7 +63,8 @@ export const Boy = new Box({
       Boy.y += set(15);
     },
     ArrowUp() {
-      Boy.y -= set(15);
+      if (Boy.dv > Boy.jumpForce) return;
+      Boy.y -= Boy.jumpForce;
     },
     ArrowLeft() {
       Boy.animations.flip = false;
@@ -73,6 +80,15 @@ export const Boy = new Box({
 
       Boy.playAnimation("turn");
     },
+  },
+  onCollision({ bottom, top }) {
+    if (bottom) {
+      Boy.dv = 0;
+      Boy.jumpForce = set(50);
+    }
+    if (top) {
+      Boy.jumpForce = 0;
+    }
   },
 }).init();
 

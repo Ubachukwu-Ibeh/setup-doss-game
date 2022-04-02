@@ -85,34 +85,9 @@ const getScaleValue = () => {
   }
 };
 
-const osv = getScaleValue();
+const osv = getScaleValue(); //original scale value.
 
 export let scaleValue = osv;
-
-const pptyOpt = {
-  x: true,
-  y: true,
-  width: true,
-  height: true,
-};
-
-export const observe = (obj, key) => {
-  if (!pptyOpt[key]) return;
-
-  let imp; //(important) for checking if value has been set for scaling
-
-  let val = obj[key];
-  Object.defineProperty(obj, key, {
-    get() {
-      const res = imp / scaleValue;
-      return res ? res : val;
-    },
-    set(newVal) {
-      val = newVal * scaleValue;
-      imp = val;
-    },
-  });
-};
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
@@ -141,13 +116,20 @@ const scaledHeight = displayHeight * scaleValue;
 game.newDisplaySettings.scaledWidth = scaledWidth;
 game.newDisplaySettings.scaledHeight = scaledHeight;
 
+game.newDisplaySettings.yMargin = (windowHeight - scaledHeight) / 2;
+game.newDisplaySettings.xMargin = (windowWidth - scaledWidth) / 2;
+
 game.newDisplaySettings.ctx = ctx;
 
 canvas.width = scaledWidth;
 canvas.height = scaledHeight;
 
 export const set = (val) => {
-  return val * scaleValue;
+  if (scaleValue !== osv) {
+    return val * osv * scaleValue;
+  } else {
+    return val * scaleValue;
+  }
 };
 
 export const cameraShake = (arr) => arr;
@@ -210,7 +192,6 @@ export const addComponent = (component) => {
 };
 
 export const rotate = ({ x, y }, angle) => {
-  ctx.save();
   ctx.translate(x, y);
   ctx.rotate((angle * Math.PI) / 180);
   ctx.translate(-x, -y);

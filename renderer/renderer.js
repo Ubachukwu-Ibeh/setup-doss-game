@@ -1,5 +1,5 @@
 import { game } from "../game.js";
-import { components } from "../globals/globals.js";
+import { components, rotate } from "../globals/globals.js";
 
 export const render = (
   { ctx, scaledWidth, scaledHeight } = game.newDisplaySettings
@@ -44,10 +44,14 @@ export const render = (
       if (currentFrame) {
         let [sx, sy, sw, sh, ix, iy, iw, ih] = currentFrame;
 
+        const rotateImg = component.animations.rotate;
         const flipAxis = component.animations.flip;
 
-        if (flipAxis) {
-          ctx.save();
+        ctx.save();
+
+        if (rotateImg) {
+          rotate(rotateImg);
+        } else if (flipAxis) {
           if (flipAxis === "x") {
             ctx.translate(ix, 0);
             ctx.scale(-1, 1);
