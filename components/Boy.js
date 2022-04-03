@@ -1,11 +1,12 @@
 import { spriteSheetData } from "../assets/spritesheet.js";
 import BoxEngine from "../BoxEngine/BoxEngine.js";
 import { game } from "../game.js";
+import * as url from "../assets/spritesheet.png";
 
-const { set, Box, zoom, preloadImage, handleAnimation, rotate } = BoxEngine;
+const { set, Box, zoom, preloadImage, handleAnimation } = BoxEngine;
 
 let animData = JSON.parse(spriteSheetData);
-let spriteSheet = preloadImage("./assets/spritesheet.png");
+let spriteSheet = preloadImage(url);
 
 const img = (val) => animData.frames[val].frame;
 

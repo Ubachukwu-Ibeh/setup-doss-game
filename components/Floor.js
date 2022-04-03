@@ -1,8 +1,6 @@
 import BoxEngine from "../BoxEngine/BoxEngine.js";
-import { game } from "../game.js";
-import { Boy } from "./Boy.js";
 
-const { set, Box, zoom, pause, scaleValue } = BoxEngine;
+const { set, Box } = BoxEngine;
 
 //Platforms
 new Box({

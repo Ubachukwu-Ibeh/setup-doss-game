@@ -11,7 +11,7 @@ window.addEventListener("keyup", (e) => {
 
 export const preloadImage = (src) => {
   const image = document.createElement("img");
-  image.setAttribute("src", src);
+  image.setAttribute("src", src.default);
   return image;
 };
 
