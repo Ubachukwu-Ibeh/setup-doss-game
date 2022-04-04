@@ -1,5 +1,4 @@
-import { game } from "../game.js";
-import { components, rotate } from "../globals/globals.js";
+import { components, rotate, game } from "../globals/globals.js";
 
 export const render = (
   { ctx, scaledWidth, scaledHeight } = game.newDisplaySettings

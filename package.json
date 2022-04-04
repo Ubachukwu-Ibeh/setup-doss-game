@@ -3,8 +3,10 @@
     "build": "webpack",
     "start": "webpack-dev-server"
   },
+  "name": "box-engine",
   "bin": "./bin/cli.js",
   "author": "Ubachukwu Brian Ibeh",
+  "version": "1.0.2",
   "devDependencies": {
     "css-loader": "^6.7.1",
     "file-loader": "^6.2.0",
@@ -16,5 +18,10 @@
     "webpack": "^5.71.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ubachukwu-Ibeh/BoxEngine"
+  },
+  "keywords": ["game", "library", "engine", "framework", "simple", "web game", "canvas", "game engine", "game-engine", "game-framework", "game-library", "game framework", "game library"]
 }

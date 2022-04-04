@@ -1,10 +1,9 @@
-import { game } from "../game.js";
 import {
   keys,
   resolveComponents,
   components,
   currentScene,
-  set,
+  game,
 } from "../globals/globals.js";
 
 export const engine = ({ newDisplaySettings, camera, pause } = game) => {
@@ -279,8 +278,8 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
 
       resolveFit(); //resolve fit after shaking.
 
-      xShakeValues.shift();
-      yShakeValues.shift();
+      // xShakeValues.shift();
+      // yShakeValues.shift();
     }
   };
 

@@ -1,6 +1,8 @@
-import { Game } from "./Game/Game.js";
+import BoxEngine from "./BoxEngine";
 
-export const game = new Game({
+const { setGame, switchScenes } = BoxEngine;
+
+export const game = setGame({
   displayWidth: 1920,
   displayHeight: 1080,
   backgroundColor: "black",
@@ -15,3 +17,4 @@ export const game = new Game({
     },
   },
 });
+switchScenes("level1");

@@ -1,6 +1,8 @@
-import { Box } from "../Box/box.js";
+import { Box } from "./Box/box.js";
+import { gameLoop } from "./gameLoop/gameLoop.js";
 import {
   addScenes,
+  deleteComponent,
   switchScenes,
   set,
   cameraShake,
@@ -10,13 +12,16 @@ import {
   play,
   preloadImage,
   preloadSound,
-  scaleValue,
   currentScene,
   handleAnimation,
-} from "../globals/globals.js";
+  setGame,
+  game,
+} from "./globals/globals.js";
 
 const BoxEngine = {
+  gameLoop,
   Box,
+  deleteComponent,
   addScenes,
   switchScenes,
   set,
@@ -27,9 +32,10 @@ const BoxEngine = {
   play,
   preloadImage,
   preloadSound,
-  scaleValue,
   currentScene,
   handleAnimation,
+  setGame,
+  game,
 };
 
 export default BoxEngine;

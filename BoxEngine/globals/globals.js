@@ -1,61 +1,62 @@
-import { game } from "../game.js";
+//////////////////////////////World setting based functionalities
 
-export const keys = {}; //object for keeping track of keyboard keys boolean values
+class Game {
+  //World constuctor
+  constructor(props) {
+    this.pause = false;
+    this.cameraShake = {
+      xValues: [],
+      yValues: [],
+    };
+    this.newDisplaySettings = {
+      scaledX: 0,
+      scaledY: 0,
+      scaledWidth: undefined,
+      scaledHeight: undefined,
+      ctx: undefined,
+    };
+    this.camera = {
+      focus: undefined,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined,
+    };
+    this.scenes = {};
+    this.newDisplaySettings = {};
 
-window.addEventListener("keydown", (e) => {
-  keys[e.key] = true;
-});
-window.addEventListener("keyup", (e) => {
-  keys[e.key] = false;
-});
-
-export const preloadImage = (src) => {
-  const image = document.createElement("img");
-  image.setAttribute("src", src.default);
-  return image;
-};
-
-export const preloadSound = (src) => {
-  const sfx = new Audio(src);
-  sfx.preload = "auto";
-  return sfx;
-};
-
-export let currentScene, components;
-
-export const resolveComponents = () => {
-  //Resolves which components should be calculated and rendered on screen
-  const { scaledX, scaledY, scaledWidth, scaledHeight } =
-    game.newDisplaySettings;
-
-  const resolvedComponents = {};
-
-  Object.keys(components).forEach((key) => {
-    const component = components[key];
-    if (
-      component.important ||
-      (component.x < scaledWidth &&
-        scaledX < component.x + component.width &&
-        component.y < scaledHeight &&
-        scaledY < component.y + component.height)
-    ) {
-      resolvedComponents[key] = component;
+    for (const key in props) {
+      this[key] = props[key];
     }
-  });
 
-  return resolvedComponents;
+    return this;
+  }
+}
+
+export const saved_game = JSON.parse(localStorage.getItem("saved-game"));
+
+//initalize game object with Game constructor
+export let game = new Game({});
+
+//To set custom values for game object
+export const setGame = (obj) => {
+  for (const key in obj) {
+    game[key] = obj[key];
+  }
 };
 
+//Prepare canvas
 const canvas = document.getElementById("canvas");
 
 const ctx = canvas.getContext("2d");
 
-const { displayWidth, displayHeight, size } = game;
-
+//Get scaleValue to resize world to screen
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
 
 const getScaleValue = () => {
+  const { displayWidth, displayHeight, size } = game;
+
   const refX = windowWidth / 2 / (displayWidth / 2);
   const refY = windowHeight / 2 / (displayHeight / 2);
 
@@ -85,19 +86,29 @@ const getScaleValue = () => {
   }
 };
 
-const osv = getScaleValue(); //original scale value.
-
-export let scaleValue = osv;
+let osv; //original scale value.
+let scaleValue;
 
 export const addScenes = (name, scene) => {
   game.scenes[name] = scene;
 };
 
 export const switchScenes = (scene) => {
+  osv = getScaleValue();
+  scaleValue = osv;
+
+  const { displayWidth, displayHeight } = game;
+
   const sceneType = typeof scene;
 
   if (sceneType === "number") {
-    currentScene = Object.values(game.scenes)[scene];
+    currentScene = {
+      worldWidth: 0,
+      worldHeight: 0,
+      worldX: 0,
+      worldY: 0,
+      components: {},
+    };
   } else if (sceneType === "string") {
     currentScene = game.scenes[scene];
   }
@@ -106,24 +117,76 @@ export const switchScenes = (scene) => {
 
   currentScene.worldWidth *= scaleValue;
   currentScene.worldHeight *= scaleValue;
+
+  const scaledWidth = displayWidth * scaleValue;
+  const scaledHeight = displayHeight * scaleValue;
+
+  game.newDisplaySettings.scaledWidth = scaledWidth;
+  game.newDisplaySettings.scaledHeight = scaledHeight;
+
+  game.newDisplaySettings.yMargin = (windowHeight - scaledHeight) / 2;
+  game.newDisplaySettings.xMargin = (windowWidth - scaledWidth) / 2;
+
+  game.newDisplaySettings.ctx = ctx;
+
+  canvas.width = scaledWidth;
+  canvas.height = scaledHeight;
 };
 
 switchScenes(0);
 
-const scaledWidth = displayWidth * scaleValue;
-const scaledHeight = displayHeight * scaleValue;
+//////////////////////////////Engine based functionalities
 
-game.newDisplaySettings.scaledWidth = scaledWidth;
-game.newDisplaySettings.scaledHeight = scaledHeight;
+export let currentScene, components;
 
-game.newDisplaySettings.yMargin = (windowHeight - scaledHeight) / 2;
-game.newDisplaySettings.xMargin = (windowWidth - scaledWidth) / 2;
+export const resolveComponents = () => {
+  //Resolves which components should be calculated and rendered on screen
+  const { scaledX, scaledY, scaledWidth, scaledHeight } =
+    game.newDisplaySettings;
 
-game.newDisplaySettings.ctx = ctx;
+  const resolvedComponents = {};
 
-canvas.width = scaledWidth;
-canvas.height = scaledHeight;
+  Object.keys(components).forEach((key) => {
+    const component = components[key];
+    if (
+      component.important ||
+      (component.x < scaledWidth &&
+        scaledX < component.x + component.width &&
+        component.y < scaledHeight &&
+        scaledY < component.y + component.height)
+    ) {
+      resolvedComponents[key] = component;
+    }
+  });
 
+  return resolvedComponents;
+};
+
+//Keyboard controls
+export const keys = {}; //object for keeping track of keyboard keys boolean values
+
+window.addEventListener("keydown", (e) => {
+  keys[e.key] = true;
+});
+window.addEventListener("keyup", (e) => {
+  keys[e.key] = false;
+});
+
+//Image preload
+export const preloadImage = (src) => {
+  const image = document.createElement("img");
+  image.setAttribute("src", src.default);
+  return image;
+};
+
+//Sound preload
+export const preloadSound = (src) => {
+  const sfx = new Audio(src);
+  sfx.preload = "auto";
+  return sfx;
+};
+
+//Set scale of values on initialization
 export const set = (val) => {
   if (scaleValue !== osv) {
     return val * osv * scaleValue;
@@ -132,8 +195,12 @@ export const set = (val) => {
   }
 };
 
-export const cameraShake = (arr) => arr;
+//Camera shake
+export const cameraShake = (axis, arr) => {
+  game.cameraShake[`${axis}Values`] = arr;
+};
 
+//Zooming
 const resolveZoom = (obj, val, reset) => {
   let amount = val;
 
@@ -190,6 +257,9 @@ export const zoom = (obj, amount) => {
 export const addComponent = (component) => {
   components[component.id] = component;
 };
+export const deleteComponent = (component) => {
+  delete components[component.id];
+};
 
 export const rotate = ({ x, y }, angle) => {
   ctx.translate(x, y);
@@ -213,6 +283,7 @@ export const handleAnimation = (component, framesArr) => {
   const frames = framesArr;
 
   if (frames[component.animations.frameNumber]) {
+    //if frame exists
     let currW = component.width;
     let currH = component.height;
 
@@ -222,6 +293,7 @@ export const handleAnimation = (component, framesArr) => {
       factor = scaleValue * osv;
     }
 
+    //Scale acnimation container for current frame of animation
     component.width = factor * frames[component.animations.frameNumber][2];
     component.height = factor * frames[component.animations.frameNumber][3];
 

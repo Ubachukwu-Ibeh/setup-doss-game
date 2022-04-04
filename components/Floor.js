@@ -1,4 +1,4 @@
-import BoxEngine from "../BoxEngine/BoxEngine.js";
+import BoxEngine from "../BoxEngine/index.js";
 
 const { set, Box } = BoxEngine;
 
