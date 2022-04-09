@@ -23,6 +23,16 @@ if (!checkedOut) process.exit(-1);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
 
-console.log("To continue, run the following commands:");
-console.log(`cd ${repoName}`);
-console.log("npm run start");
+const enterRepo = runCommand(`cd ${repoName}`);
+if (!enterRepo) process.exit(-1);
+
+const removeRemote = runCommand(
+  "git remote rm https://github.com/Ubachukwu-Ibeh/create-doss-game"
+);
+if (!removeRemote) process.exit(-1);
+
+const startServer = runCommand("npm run start");
+if (!startServer) process.exit(-1);
+
+const removeBin = runCommand("git rm -r bin");
+if (!removeBin) process.exit(-1);
