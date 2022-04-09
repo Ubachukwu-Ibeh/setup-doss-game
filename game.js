@@ -1,6 +1,6 @@
-import BoxEngine from "./BoxEngine";
+import doss from "doss";
 
-const { setGame, switchScenes } = BoxEngine;
+const { setGame, switchScenes } = doss;
 
 export const game = setGame({
   displayWidth: 1920,

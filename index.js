@@ -1,9 +1,8 @@
 import css from "./style.css";
-import BoxEngine from "./BoxEngine";
+import doss from "doss";
 import { game } from "./game.js";
-import { Boy } from "./components/Boy.js";
-import { Floor } from "./components/Floor.js";
+//components
 
-const { gameLoop } = BoxEngine;
+const { gameLoop } = doss;
 
 gameLoop();

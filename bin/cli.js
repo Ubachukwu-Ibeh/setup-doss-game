@@ -12,7 +12,7 @@ const runCommand = (command) => {
 };
 
 const repoName = process.argv[2];
-const gitCheckoutCommand = `git clone --depth 1 https://github.com/Ubachukwu-Ibeh/BoxEngine ${repoName}`;
+const gitCheckoutCommand = `git clone --depth 1 https://github.com/Ubachukwu-Ibeh/doss ${repoName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`Preparing ${repoName}...`);

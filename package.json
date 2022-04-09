@@ -3,12 +3,13 @@
     "build": "webpack",
     "start": "webpack-dev-server"
   },
-  "name": "box-engine",
+  "name": "create-doss-game",
   "bin": "./bin/cli.js",
   "author": "Ubachukwu Brian Ibeh",
   "version": "1.0.2",
   "devDependencies": {
     "css-loader": "^6.7.1",
+    "doss": "^1.0.3",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "loader": "^2.1.1",
@@ -21,7 +22,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ubachukwu-Ibeh/BoxEngine"
+    "url": "https://github.com/Ubachukwu-Ibeh/create-doss-game"
   },
-  "keywords": ["game", "library", "engine", "framework", "simple", "web game", "canvas", "game engine", "game-engine", "game-framework", "game-library", "game framework", "game library"]
+  "keywords": [
+    "game",
+    "library",
+    "engine",
+    "framework",
+    "simple",
+    "web game",
+    "canvas",
+    "game engine",
+    "game-engine",
+    "game-framework",
+    "game-library",
+    "game framework",
+    "game library"
+  ]
 }
