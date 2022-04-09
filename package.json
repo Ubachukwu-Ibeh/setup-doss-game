@@ -6,7 +6,7 @@
   "name": "create-doss-game",
   "bin": "./bin/cli.js",
   "author": "Ubachukwu Brian Ibeh",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "devDependencies": {
     "css-loader": "^6.7.1",
     "doss": "^1.0.3",
