@@ -23,7 +23,7 @@ if (!checkedOut) process.exit(-1);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
 
-const removeRemote = runCommand("git remote rm github-create-doss-game");
+const removeRemote = runCommand("git remote rm origin");
 if (!removeRemote) process.exit(-1);
 
 const startServer = runCommand("npm run start");
