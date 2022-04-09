@@ -12,7 +12,7 @@ const runCommand = (command) => {
 };
 
 const repoName = process.argv[2];
-const gitCheckoutCommand = `git clone --depth 0 https://github.com/Ubachukwu-Ibeh/create-doss-game ${repoName}`;
+const gitCheckoutCommand = `git clone --depth 1 https://github.com/Ubachukwu-Ibeh/create-doss-game ${repoName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`Preparing ${repoName}...`);
