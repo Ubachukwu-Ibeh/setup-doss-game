@@ -23,6 +23,6 @@ if (!checkedOut) process.exit(-1);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
 
-runCommand(`cd ${repoName}`);
-runCommand("code .");
-runCommand("npm run start");
+console.log("To continue, run the following commands:");
+console.log(`cd ${repoName}`);
+console.log("npm run start");
