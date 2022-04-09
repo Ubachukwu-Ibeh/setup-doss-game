@@ -12,13 +12,10 @@ const runCommand = (command) => {
 };
 
 const repoName = process.argv[2];
-const gitCheckoutCommand = `git clone --depth 1 https://github.com/Ubachukwu-Ibeh/create-doss-game ${repoName}`;
+const gitCheckoutCommand = `git clone --depth 0 https://github.com/Ubachukwu-Ibeh/create-doss-game ${repoName}`;
 const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`Preparing ${repoName}...`);
-
-const init = runCommand("npm init -y");
-if (!init) process.exit(-1);
 
 const checkedOut = runCommand(gitCheckoutCommand);
 if (!checkedOut) process.exit(-1);
