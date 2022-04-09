@@ -17,6 +17,9 @@ const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`Preparing ${repoName}...`);
 
+const init = runCommand("npm init -y");
+if (!init) process.exit(-1);
+
 const checkedOut = runCommand(gitCheckoutCommand);
 if (!checkedOut) process.exit(-1);
 
