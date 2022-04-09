@@ -23,9 +23,6 @@ if (!checkedOut) process.exit(-1);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
 
-const enterRepo = runCommand(`cd ${repoName}`);
-if (!enterRepo) process.exit(-1);
-
 const removeRemote = runCommand(
   "git remote rm https://github.com/Ubachukwu-Ibeh/create-doss-game"
 );
