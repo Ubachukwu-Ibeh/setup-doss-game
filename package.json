@@ -1,13 +1,14 @@
 {
   "name": "setup-doss-game",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A starter template for creating games with the doss framework.",
   "main": "index.js",
   "bin": {
     "setup-doss-game": "bin/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "start": "webpack-dev-server"
   },
   "keywords": [],
   "author": "",
