@@ -1,6 +1,6 @@
 {
   "name": "setup-doss-game",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A starter template for creating games with the doss framework.",
   "main": "index.js",
   "bin": {
