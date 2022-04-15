@@ -1,12 +1,17 @@
 {
-  "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server"
-  },
-  "name": "create-doss-game",
-  "bin": "./bin/cli.js",
-  "author": "Ubachukwu Brian Ibeh",
+  "name": "setup-doss-game",
   "version": "1.0.0",
+  "description": "A starter template for creating games with the doss framework.",
+  "main": "index.js",
+  "bin": {
+    "setup-doss-game": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "css-loader": "^6.7.1",
     "doss": "^1.0.3",
@@ -16,27 +21,8 @@
     "style": "^0.0.3",
     "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",
-    "webpack": "^5.71.0",
+    "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Ubachukwu-Ibeh/create-doss-game"
-  },
-  "keywords": [
-    "game",
-    "library",
-    "engine",
-    "framework",
-    "simple",
-    "web game",
-    "canvas",
-    "game engine",
-    "game-engine",
-    "game-framework",
-    "game-library",
-    "game framework",
-    "game library"
-  ]
+    "webpack-dev-server": "^4.8.1"
+  }
 }
